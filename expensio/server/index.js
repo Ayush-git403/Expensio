@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -8,19 +9,21 @@ const expenseRoutes = require('./routes/expenses');
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: ['http://localhost:5173'],
+  credentials: true  // ← required for cookies
+}));
 
-// Routes
+app.use(express.json());
+app.use(cookieParser());
+
 app.use('/api/auth', authRoutes);
 app.use('/api/expenses', expenseRoutes);
 
-// Test route
 app.get('/', (req, res) => {
   res.send('Expensio API is running...');
 });
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB connected');

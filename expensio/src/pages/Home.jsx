@@ -67,7 +67,7 @@ export default function Home() {
             }}>
               Welcome back, {user?.name?.split(' ')[0]} 👋
             </h1>
-            <p style={{ color: theme.textMuted, fontSize: 14, marginTop: 6 }}>
+            <p style={{ color: theme.textPrimary, fontSize: 14, marginTop: 6, opacity: 0.7 }}>
               Track and manage your expenses by month
             </p>
           </div>
@@ -78,7 +78,7 @@ export default function Home() {
               style={{
                 background: theme.cardBg,
                 border: `1px solid ${theme.cardBorder}`,
-                color: theme.textMuted,
+                color: theme.textPrimary,
                 padding: '8px 16px', borderRadius: 10,
                 fontSize: 18, cursor: 'pointer',
                 transition: 'all 0.2s'
@@ -97,7 +97,7 @@ export default function Home() {
               style={{
                 background: theme.cardBg,
                 border: `1px solid ${theme.cardBorder}`,
-                color: theme.textMuted,
+                color: theme.textPrimary,
                 padding: '8px 16px', borderRadius: 10,
                 fontSize: 18, cursor: 'pointer',
                 transition: 'all 0.2s'
@@ -139,7 +139,8 @@ export default function Home() {
             {
               label: 'BUSIEST MONTH',
               value: Object.keys(monthlyTotals).length
-                ? MONTHS[Number(Object.entries(monthlyTotals).sort((a,b) => b[1]-a[1])[0]?.[0])]?.slice(0,3)
+                ? MONTHS[Number(Object.entries(monthlyTotals)
+                    .sort((a,b) => b[1]-a[1])[0]?.[0])]?.slice(0,3)
                 : '—',
               sub: 'highest spending',
               color: theme.almond
@@ -152,7 +153,8 @@ export default function Home() {
               transition: 'background 0.3s'
             }}>
               <div style={{
-                fontSize: 11, color: theme.textMuted,
+                fontSize: 11, color: theme.textPrimary,
+                opacity: 0.6,
                 marginBottom: 8, letterSpacing: '0.06em', fontWeight: 500
               }}>
                 {c.label}
@@ -163,30 +165,36 @@ export default function Home() {
               }}>
                 {c.value}
               </div>
-              <div style={{ fontSize: 12, color: theme.textSubtle, marginTop: 4 }}>
+              <div style={{
+                fontSize: 12, color: theme.textPrimary,
+                opacity: 0.5, marginTop: 4
+              }}>
                 {c.sub}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Monthly Calendar Grid */}
+        {/* Section Label */}
         {loading ? (
           <div style={{
             textAlign: 'center', padding: '80px 0',
-            color: theme.textMuted, fontSize: 15
+            color: theme.textPrimary, fontSize: 15, opacity: 0.6
           }}>
             Loading your expenses...
           </div>
         ) : (
           <>
             <div style={{
-              fontSize: 12, color: theme.textMuted,
+              fontSize: 12, color: theme.textPrimary,
+              opacity: 0.55,
               letterSpacing: '0.06em', marginBottom: 14,
               fontWeight: 500
             }}>
               MONTHLY BREAKDOWN — CLICK A MONTH TO VIEW EXPENSES
             </div>
+
+            {/* Monthly Grid */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))',
@@ -209,7 +217,7 @@ export default function Home() {
                       borderRadius: 14, padding: '20px 20px',
                       cursor: 'pointer', position: 'relative',
                       transition: 'all 0.2s',
-                      opacity: !total && !isCurrent ? 0.55 : 1
+                      opacity: !total && !isCurrent ? 0.75 : 1
                     }}
                     onMouseOver={e => {
                       e.currentTarget.style.borderColor = theme.accent;
@@ -236,10 +244,13 @@ export default function Home() {
                       </div>
                     )}
 
-                    {/* Month name */}
+                    {/* Month name — FIXED COLOR */}
                     <div style={{
-                      fontSize: 13, color: theme.textMuted,
-                      marginBottom: 10, fontWeight: 500
+                      fontSize: 14,
+                      color: theme.textPrimary,
+                      marginBottom: 10,
+                      fontWeight: 600,
+                      letterSpacing: '0.01em'
                     }}>
                       {name}
                     </div>
@@ -247,40 +258,50 @@ export default function Home() {
                     {/* Amount */}
                     <div className="serif" style={{
                       fontSize: 22,
-                      color: total ? theme.textPrimary : theme.textSubtle,
-                      marginBottom: 14, letterSpacing: '-0.3px'
+                      color: total ? theme.accent : theme.textPrimary,
+                      opacity: total ? 1 : 0.3,
+                      marginBottom: 14,
+                      letterSpacing: '-0.3px'
                     }}>
                       {total ? `₹${total.toLocaleString('en-IN')}` : '—'}
                     </div>
 
-                    {/* Bar */}
+                    {/* Progress bar */}
                     <div style={{
                       background: theme.barTrack,
-                      borderRadius: 99, height: 5, overflow: 'hidden'
+                      borderRadius: 99, height: 5,
+                      overflow: 'hidden'
                     }}>
                       <div style={{
                         width: barWidth + '%', height: '100%',
-                        background: total
-                          ? (barWidth > 75 ? theme.highlight : theme.accent)
-                          : 'transparent',
-                        borderRadius: 99, transition: 'width 0.6s ease'
+                        background: barWidth > 75 ? theme.highlight : theme.accent,
+                        borderRadius: 99,
+                        transition: 'width 0.6s ease'
                       }} />
                     </div>
 
+                    {/* Footer row */}
                     <div style={{
-                      fontSize: 11, color: theme.textSubtle,
-                      marginTop: 10, display: 'flex',
+                      fontSize: 11,
+                      color: theme.textPrimary,
+                      opacity: 0.5,
+                      marginTop: 10,
+                      display: 'flex',
                       justifyContent: 'space-between'
                     }}>
                       <span>{total ? `${barWidth}% of peak` : 'No expenses'}</span>
-                      {total ? <span style={{ color: theme.accent }}>View →</span> : null}
+                      {total
+                        ? <span style={{ color: theme.accent, opacity: 1 }}>View →</span>
+                        : null}
                     </div>
+
                   </div>
                 );
               })}
             </div>
           </>
         )}
+
       </div>
     </div>
   );
