@@ -4,25 +4,23 @@
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: #0e0e10;
-  color: #f0ede8;
   min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
 }
 
 .serif { font-family: 'DM Serif Display', serif; }
 
 input, select {
-  background: #1a1a1f;
-  border: 1px solid #2e2e38;
-  color: #f0ede8;
+  border: 1px solid #5a647a;
+  color: inherit;
   padding: 10px 14px;
   border-radius: 10px;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.3s;
 }
 
-input:focus, select:focus { border-color: #c9a96e; }
-select option { background: #1a1a1f; }
+input:focus, select:focus { border-color: #008DD5; }
+select option { background: #373F51; color: #fff; }
 button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
