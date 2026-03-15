@@ -9,7 +9,7 @@ const MONTHS = ['January','February','March','April','May','June',
 const DEFAULT_FORM = { name: '', amount: '', category: 'Food', note: '' };
 
 export default function MonthView({ month, year, onBack }) {
-  const { theme } = useTheme();
+  const { dark, theme } = useTheme();
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -78,6 +78,29 @@ export default function MonthView({ month, year, onBack }) {
 
   const total = expenses.reduce((s, e) => s + e.amount, 0);
 
+  const inputStyle = {
+    width: '100%',
+    background: theme.inputBg,
+    border: `1px solid ${theme.cardBorder}`,
+    color: theme.textPrimary,
+    padding: '10px 14px',
+    borderRadius: '10px',
+    fontSize: '14px',
+    outline: 'none',
+    fontFamily: 'DM Sans, sans-serif',
+    colorScheme: dark ? 'dark' : 'light'
+  };
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: 11,
+    color: theme.textPrimary,
+    opacity: 0.6,
+    marginBottom: 6,
+    letterSpacing: '0.05em',
+    fontWeight: 500
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -91,6 +114,8 @@ export default function MonthView({ month, year, onBack }) {
           display: 'flex', alignItems: 'center',
           gap: 16, marginBottom: 28
         }}>
+
+          {/* Back button */}
           <button onClick={onBack}
             style={{
               background: theme.cardBg,
@@ -105,6 +130,7 @@ export default function MonthView({ month, year, onBack }) {
             ← Back
           </button>
 
+          {/* Title */}
           <div style={{ flex: 1 }}>
             <h2 className="serif" style={{
               fontSize: 30, color: theme.textPrimary,
@@ -112,7 +138,10 @@ export default function MonthView({ month, year, onBack }) {
             }}>
               {MONTHS[month]} {year}
             </h2>
-            <p style={{ color: theme.textPrimary, fontSize: 13, opacity: 0.6, marginTop: 3 }}>
+            <p style={{
+              color: theme.textPrimary, fontSize: 13,
+              opacity: 0.6, marginTop: 3
+            }}>
               {expenses.length} expenses · Total:{' '}
               <span style={{ color: theme.accent, opacity: 1 }}>
                 ₹{total.toLocaleString('en-IN')}
@@ -120,6 +149,7 @@ export default function MonthView({ month, year, onBack }) {
             </p>
           </div>
 
+          {/* Add Expense button */}
           <button
             onClick={() => {
               setShowForm(!showForm);
@@ -132,11 +162,15 @@ export default function MonthView({ month, year, onBack }) {
             style={{
               background: showForm ? theme.cardBg : theme.accent,
               border: showForm ? `1px solid ${theme.cardBorder}` : 'none',
-              color: showForm ? theme.textPrimary : '#ffffff',
+              color: showForm
+                ? theme.textPrimary
+                : dark ? '#000000' : '#ffffff',
               padding: '10px 22px', borderRadius: 10,
-              fontWeight: 600, fontSize: 14, cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}>
+              fontWeight: 600, fontSize: 14,
+              cursor: 'pointer', transition: 'all 0.2s'
+            }}
+            onMouseOver={e => e.currentTarget.style.opacity = '0.85'}
+            onMouseOut={e => e.currentTarget.style.opacity = '1'}>
             {showForm ? 'Cancel' : '+ Add Expense'}
           </button>
         </div>
@@ -146,126 +180,109 @@ export default function MonthView({ month, year, onBack }) {
           <div style={{
             background: theme.cardBg,
             border: `1px solid ${theme.cardBorder}`,
-            borderRadius: 14, padding: 24, marginBottom: 24,
+            borderRadius: 14, padding: 24,
+            marginBottom: 24,
             transition: 'background 0.3s'
           }}>
+
+            {/* Error */}
             {error && (
               <div style={{
                 color: theme.highlight, fontSize: 13,
                 marginBottom: 14, padding: '8px 12px',
                 background: theme.highlight + '18',
-                borderRadius: 8, border: `1px solid ${theme.highlight}44`
+                borderRadius: 8,
+                border: `1px solid ${theme.highlight}44`
               }}>
                 {error}
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-              {[
-                { label: 'NAME', key: 'name', type: 'text', placeholder: 'Expense name' },
-                { label: 'AMOUNT (₹)', key: 'amount', type: 'number', placeholder: '0' },
-              ].map(f => (
-                <div key={f.key}>
-                  <label style={{
-                    display: 'block', fontSize: 11,
-                    color: theme.textPrimary, opacity: 0.6,
-                    marginBottom: 6, letterSpacing: '0.05em', fontWeight: 500
-                  }}>
-                    {f.label}
-                  </label>
-                  <input
-                    type={f.type}
-                    value={form[f.key]}
-                    onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-                    placeholder={f.placeholder}
-                    style={{
-                      width: '100%',
-                      background: theme.inputBg,
-                      borderColor: theme.cardBorder,
-                      color: theme.textPrimary
-                    }}
-                  />
-                </div>
-              ))}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 14
+            }}>
 
+              {/* Name */}
               <div>
-                <label style={{
-                  display: 'block', fontSize: 11,
-                  color: theme.textPrimary, opacity: 0.6,
-                  marginBottom: 6, letterSpacing: '0.05em', fontWeight: 500
-                }}>
-                  CATEGORY
-                </label>
+                <label style={labelStyle}>NAME</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                  placeholder="Expense name"
+                  style={inputStyle}
+                />
+              </div>
+
+              {/* Amount */}
+              <div>
+                <label style={labelStyle}>AMOUNT (₹)</label>
+                <input
+                  type="number"
+                  value={form.amount}
+                  onChange={e => setForm(p => ({ ...p, amount: e.target.value }))}
+                  placeholder="0"
+                  style={inputStyle}
+                />
+              </div>
+
+              {/* Category */}
+              <div>
+                <label style={labelStyle}>CATEGORY</label>
                 <select
                   value={form.category}
                   onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
-                  style={{
-                    width: '100%',
-                    background: theme.inputBg,
-                    borderColor: theme.cardBorder,
-                    color: theme.textPrimary
-                  }}>
+                  style={inputStyle}>
                   {CATEGORIES.map(c => <option key={c}>{c}</option>)}
                 </select>
               </div>
 
+              {/* Date */}
               <div>
-                <label style={{
-                  display: 'block', fontSize: 11,
-                  color: theme.textPrimary, opacity: 0.6,
-                  marginBottom: 6, letterSpacing: '0.05em', fontWeight: 500
-                }}>
-                  DATE
-                </label>
+                <label style={labelStyle}>DATE</label>
                 <input
                   type="date"
                   value={form.date}
                   onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
-                  style={{
-                    width: '100%',
-                    background: theme.inputBg,
-                    borderColor: theme.cardBorder,
-                    color: theme.textPrimary
-                  }}
+                  style={inputStyle}
                 />
               </div>
             </div>
 
+            {/* Note */}
             <div style={{ marginTop: 14 }}>
-              <label style={{
-                display: 'block', fontSize: 11,
-                color: theme.textPrimary, opacity: 0.6,
-                marginBottom: 6, letterSpacing: '0.05em', fontWeight: 500
-              }}>
-                NOTE (optional)
-              </label>
+              <label style={labelStyle}>NOTE (optional)</label>
               <input
                 type="text"
                 value={form.note}
                 onChange={e => setForm(p => ({ ...p, note: e.target.value }))}
                 placeholder="Any extra detail..."
-                style={{
-                  width: '100%',
-                  background: theme.inputBg,
-                  borderColor: theme.cardBorder,
-                  color: theme.textPrimary
-                }}
+                style={inputStyle}
               />
             </div>
 
+            {/* Save button */}
             <button onClick={handleSave}
               style={{
-                marginTop: 18, padding: '11px 28px',
-                background: theme.accent, border: 'none',
-                borderRadius: 10, color: '#ffffff',
-                fontWeight: 600, fontSize: 14, cursor: 'pointer'
-              }}>
+                marginTop: 18,
+                padding: '11px 28px',
+                background: theme.accent,
+                border: 'none', borderRadius: 10,
+                color: dark ? '#000000' : '#ffffff',
+                fontWeight: 600, fontSize: 14,
+                cursor: 'pointer', transition: 'all 0.2s',
+                fontFamily: 'DM Sans, sans-serif'
+              }}
+              onMouseOver={e => e.currentTarget.style.opacity = '0.85'}
+              onMouseOut={e => e.currentTarget.style.opacity = '1'}>
               {editId ? 'Save Changes' : 'Add Expense'}
             </button>
           </div>
         )}
 
-        {/* Expense List */}
+        {/* Loading */}
         {loading ? (
           <div style={{
             textAlign: 'center', padding: '60px 0',
@@ -273,6 +290,8 @@ export default function MonthView({ month, year, onBack }) {
           }}>
             Loading...
           </div>
+
+        /* Empty state */
         ) : expenses.length === 0 ? (
           <div style={{
             textAlign: 'center', padding: '60px 0',
@@ -280,6 +299,8 @@ export default function MonthView({ month, year, onBack }) {
           }}>
             No expenses for {MONTHS[month]}. Add your first one!
           </div>
+
+        /* Expense list */
         ) : (
           <div style={{
             background: theme.cardBg,
@@ -302,11 +323,15 @@ export default function MonthView({ month, year, onBack }) {
                 onMouseOut={ev => ev.currentTarget.style.background = 'transparent'}>
 
                 {/* Left — icon + details */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1 }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center',
+                  gap: 12, flex: 1
+                }}>
                   <div style={{
                     width: 40, height: 40, borderRadius: 11,
                     background: COLORS[CATEGORIES.indexOf(e.category) % COLORS.length] + '28',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    display: 'flex', alignItems: 'center',
+                    justifyContent: 'center',
                     color: COLORS[CATEGORIES.indexOf(e.category) % COLORS.length],
                     fontWeight: 700, fontSize: 15
                   }}>
@@ -326,16 +351,20 @@ export default function MonthView({ month, year, onBack }) {
                       <span style={{
                         background: COLORS[CATEGORIES.indexOf(e.category) % COLORS.length] + '22',
                         color: COLORS[CATEGORIES.indexOf(e.category) % COLORS.length],
-                        padding: '2px 9px', borderRadius: 99, fontSize: 11,
-                        fontWeight: 500
+                        padding: '2px 9px', borderRadius: 99,
+                        fontSize: 11, fontWeight: 500
                       }}>
                         {e.category}
                       </span>
-                      <span style={{ color: theme.textPrimary, opacity: 0.45 }}>
+                      <span style={{
+                        color: theme.textPrimary, opacity: 0.45
+                      }}>
                         {new Date(e.date).toLocaleDateString('en-IN')}
                       </span>
                       {e.note && (
-                        <span style={{ color: theme.textPrimary, opacity: 0.35 }}>
+                        <span style={{
+                          color: theme.textPrimary, opacity: 0.35
+                        }}>
                           · {e.note}
                         </span>
                       )}
@@ -344,26 +373,33 @@ export default function MonthView({ month, year, onBack }) {
                 </div>
 
                 {/* Right — amount + actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 12
+                }}>
                   <span className="serif" style={{
                     fontSize: 19, color: theme.accent,
                     letterSpacing: '-0.3px'
                   }}>
                     ₹{e.amount.toLocaleString('en-IN')}
                   </span>
+
+                  {/* Edit button */}
                   <button onClick={() => handleEdit(e)}
                     style={{
                       background: 'none',
                       border: `1px solid ${theme.cardBorder}`,
-                      color: theme.textPrimary, opacity: 0.7,
+                      color: theme.textPrimary,
                       padding: '5px 13px', borderRadius: 8,
                       fontSize: 12, cursor: 'pointer',
-                      transition: 'all 0.2s'
+                      transition: 'all 0.2s',
+                      fontFamily: 'DM Sans, sans-serif'
                     }}
-                    onMouseOver={e => e.target.style.borderColor = theme.accent}
-                    onMouseOut={e => e.target.style.borderColor = theme.cardBorder}>
+                    onMouseOver={ev => ev.currentTarget.style.borderColor = theme.accent}
+                    onMouseOut={ev => ev.currentTarget.style.borderColor = theme.cardBorder}>
                     Edit
                   </button>
+
+                  {/* Delete button */}
                   <button onClick={() => handleDelete(e._id)}
                     style={{
                       background: 'none',
@@ -371,11 +407,12 @@ export default function MonthView({ month, year, onBack }) {
                       color: theme.highlight,
                       padding: '5px 13px', borderRadius: 8,
                       fontSize: 12, cursor: 'pointer',
-                      transition: 'all 0.2s'
+                      transition: 'all 0.2s',
+                      fontFamily: 'DM Sans, sans-serif'
                     }}
-                    onMouseOver={ev => ev.target.style.background = theme.highlight + '18'}
-                    onMouseOut={ev => ev.target.style.background = 'none'}>
-                    Del
+                    onMouseOver={ev => ev.currentTarget.style.background = theme.highlight + '18'}
+                    onMouseOut={ev => ev.currentTarget.style.background = 'none'}>
+                    Delete
                   </button>
                 </div>
               </div>

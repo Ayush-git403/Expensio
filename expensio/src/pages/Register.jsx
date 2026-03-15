@@ -9,7 +9,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const { theme } = useTheme();
+  const { dark, theme } = useTheme();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -27,19 +27,39 @@ export default function Register() {
     }
   }
 
+  const inputStyle = {
+    width: '100%',
+    background: theme.inputBg,
+    border: `1px solid ${theme.cardBorder}`,
+    color: theme.textPrimary,
+    padding: '10px 14px',
+    borderRadius: '10px',
+    fontSize: '14px',
+    outline: 'none',
+    fontFamily: 'DM Sans, sans-serif',
+    colorScheme: dark ? 'dark' : 'light'
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
       background: theme.bg,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       transition: 'background 0.3s'
     }}>
       <div style={{ width: '100%', maxWidth: 440, padding: '0 20px' }}>
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <span className="serif" style={{ fontSize: 42, color: theme.accent }}>Expensio</span>
-          <p style={{ color: theme.textMuted, fontSize: 14, marginTop: 8 }}>
+          <span className="serif" style={{ fontSize: 42, color: theme.accent }}>
+            Expensio
+          </span>
+          <p style={{
+            color: theme.textPrimary, opacity: 0.6,
+            fontSize: 14, marginTop: 8
+          }}>
             Create your free account
           </p>
         </div>
@@ -58,77 +78,121 @@ export default function Register() {
               background: theme.highlight + '22',
               border: `1px solid ${theme.highlight}`,
               borderRadius: 10, padding: '10px 14px',
-              color: theme.highlight, fontSize: 13, marginBottom: 20
+              color: theme.highlight,
+              fontSize: 13, marginBottom: 20
             }}>
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit}>
-            {[
-              { label: 'FULL NAME',  key: 'name',     type: 'text',     placeholder: 'John Doe' },
-              { label: 'EMAIL',      key: 'email',     type: 'email',    placeholder: 'you@example.com' },
-              { label: 'PASSWORD',   key: 'password',  type: 'password', placeholder: '••••••••' },
-            ].map(f => (
-              <div key={f.key} style={{ marginBottom: 18 }}>
-                <label style={{
-                  display: 'block', fontSize: 11,
-                  color: theme.textMuted, marginBottom: 7,
-                  letterSpacing: '0.06em', fontWeight: 500
-                }}>
-                  {f.label}
-                </label>
-                <input
-                  type={f.type}
-                  value={form[f.key]}
-                  onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-                  placeholder={f.placeholder}
-                  style={{
-                    width: '100%',
-                    background: theme.inputBg,
-                    borderColor: theme.cardBorder,
-                    color: theme.textPrimary
-                  }}
-                  required
-                />
-              </div>
-            ))}
 
-            <div style={{ marginTop: 28 }}>
-              <button
-                type="submit"
-                disabled={loading}
-                style={{
-                  width: '100%', padding: '13px',
-                  background: theme.accent,
-                  border: 'none', borderRadius: 12,
-                  color: '#ffffff', fontSize: 15,
-                  fontWeight: 600, cursor: 'pointer',
-                  opacity: loading ? 0.7 : 1,
-                  transition: 'opacity 0.2s, transform 0.1s'
-                }}
-                onMouseOver={e => e.target.style.opacity = 0.88}
-                onMouseOut={e => e.target.style.opacity = loading ? 0.7 : 1}>
-                {loading ? 'Creating account...' : 'Create Account'}
-              </button>
+            {/* Name */}
+            <div style={{ marginBottom: 18 }}>
+              <label style={{
+                display: 'block', fontSize: 11,
+                color: theme.textPrimary, opacity: 0.6,
+                marginBottom: 7, letterSpacing: '0.06em',
+                fontWeight: 500
+              }}>
+                FULL NAME
+              </label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                placeholder="John Doe"
+                style={inputStyle}
+                required
+              />
             </div>
+
+            {/* Email */}
+            <div style={{ marginBottom: 18 }}>
+              <label style={{
+                display: 'block', fontSize: 11,
+                color: theme.textPrimary, opacity: 0.6,
+                marginBottom: 7, letterSpacing: '0.06em',
+                fontWeight: 500
+              }}>
+                EMAIL
+              </label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                placeholder="you@example.com"
+                style={inputStyle}
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div style={{ marginBottom: 28 }}>
+              <label style={{
+                display: 'block', fontSize: 11,
+                color: theme.textPrimary, opacity: 0.6,
+                marginBottom: 7, letterSpacing: '0.06em',
+                fontWeight: 500
+              }}>
+                PASSWORD
+              </label>
+              <input
+                type="password"
+                value={form.password}
+                onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                placeholder="••••••••"
+                style={inputStyle}
+                required
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%', padding: '13px',
+                background: theme.accent,
+                border: 'none', borderRadius: 12,
+                color: dark ? '#000000' : '#ffffff',
+                fontSize: 15, fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                transition: 'opacity 0.2s',
+                fontFamily: 'DM Sans, sans-serif'
+              }}
+              onMouseOver={e => { if (!loading) e.target.style.opacity = 0.85 }}
+              onMouseOut={e => { if (!loading) e.target.style.opacity = 1 }}>
+              {loading ? 'Creating account...' : 'Create Account'}
+            </button>
           </form>
 
           {/* Divider */}
           <div style={{
-            display: 'flex', alignItems: 'center', gap: 12,
-            margin: '24px 0'
+            display: 'flex', alignItems: 'center',
+            gap: 12, margin: '24px 0'
           }}>
             <div style={{ flex: 1, height: 1, background: theme.cardBorder }} />
-            <span style={{ fontSize: 12, color: theme.textSubtle }}>or</span>
+            <span style={{
+              fontSize: 12, color: theme.textPrimary,
+              opacity: 0.4
+            }}>
+              or
+            </span>
             <div style={{ flex: 1, height: 1, background: theme.cardBorder }} />
           </div>
 
-          <p style={{ textAlign: 'center', fontSize: 13, color: theme.textMuted }}>
+          <p style={{
+            textAlign: 'center', fontSize: 13,
+            color: theme.textPrimary, opacity: 0.6
+          }}>
             Already have an account?{' '}
             <Link to="/login" style={{
               color: theme.accent,
-              textDecoration: 'none', fontWeight: 500
+              textDecoration: 'none',
+              fontWeight: 500,
+              opacity: 1
             }}>
               Sign in
             </Link>
@@ -138,7 +202,8 @@ export default function Register() {
         {/* Footer */}
         <p style={{
           textAlign: 'center', marginTop: 24,
-          fontSize: 12, color: theme.textSubtle
+          fontSize: 12, color: theme.textPrimary,
+          opacity: 0.35
         }}>
           Your data is private and secure 🔒
         </p>

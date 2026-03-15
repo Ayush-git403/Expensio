@@ -5,10 +5,9 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const COOKIE_OPTIONS = {
-  httpOnly: true,       // JS cannot access this cookie
-  secure: process.env.NODE_ENV === 'production', // HTTPS only in prod
-  sameSite: 'strict',   // CSRF protection
-  maxAge: 30 * 24 * 60 * 60 * 1000  // 30 days in ms
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
 };
 
 const generateToken = (userId) => {

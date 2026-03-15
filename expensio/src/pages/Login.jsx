@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import API from '../api/axios';
 
 export default function Login() {
@@ -8,6 +9,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { dark, theme } = useTheme();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -25,40 +27,158 @@ export default function Login() {
     }
   }
 
+  const inputStyle = {
+    width: '100%',
+    background: theme.inputBg,
+    border: `1px solid ${theme.cardBorder}`,
+    color: theme.textPrimary,
+    padding: '10px 14px',
+    borderRadius: '10px',
+    fontSize: '14px',
+    outline: 'none',
+    fontFamily: 'DM Sans, sans-serif',
+    colorScheme: dark ? 'dark' : 'light'
+  };
+
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0e0e10' }}>
-      <div style={{ width: '100%', maxWidth: 420, padding: '0 20px' }}>
+    <div style={{
+      minHeight: '100vh',
+      background: theme.bg,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'background 0.3s'
+    }}>
+      <div style={{ width: '100%', maxWidth: 440, padding: '0 20px' }}>
+
+        {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <span className="serif" style={{ fontSize: 38, color: '#c9a96e' }}>Expensio</span>
-          <p style={{ color: '#666', fontSize: 14, marginTop: 6 }}>Sign in to your account</p>
+          <span className="serif" style={{ fontSize: 42, color: theme.accent }}>
+            Expensio
+          </span>
+          <p style={{
+            color: theme.textPrimary, opacity: 0.6,
+            fontSize: 14, marginTop: 8
+          }}>
+            Sign in to your account
+          </p>
         </div>
-        <div style={{ background: '#13131a', border: '1px solid #2e2e38', borderRadius: 16, padding: 32 }}>
+
+        {/* Card */}
+        <div style={{
+          background: theme.cardBg,
+          border: `1px solid ${theme.cardBorder}`,
+          borderRadius: 20, padding: '36px 32px',
+          transition: 'background 0.3s'
+        }}>
+
+          {/* Error */}
           {error && (
-            <div style={{ background: '#3e1a1a', border: '1px solid #e05c5c', borderRadius: 8, padding: '10px 14px', color: '#e05c5c', fontSize: 13, marginBottom: 20 }}>
+            <div style={{
+              background: theme.highlight + '22',
+              border: `1px solid ${theme.highlight}`,
+              borderRadius: 10, padding: '10px 14px',
+              color: theme.highlight,
+              fontSize: 13, marginBottom: 20
+            }}>
               {error}
             </div>
           )}
+
           <form onSubmit={handleSubmit}>
+
+            {/* Email */}
             <div style={{ marginBottom: 18 }}>
-              <label style={{ display: 'block', fontSize: 12, color: '#666', marginBottom: 7, letterSpacing: '0.04em' }}>EMAIL</label>
-              <input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                placeholder="you@example.com" style={{ width: '100%' }} required />
+              <label style={{
+                display: 'block', fontSize: 11,
+                color: theme.textPrimary, opacity: 0.6,
+                marginBottom: 7, letterSpacing: '0.06em',
+                fontWeight: 500
+              }}>
+                EMAIL
+              </label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                placeholder="you@example.com"
+                style={inputStyle}
+                required
+              />
             </div>
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ display: 'block', fontSize: 12, color: '#666', marginBottom: 7, letterSpacing: '0.04em' }}>PASSWORD</label>
-              <input type="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                placeholder="••••••••" style={{ width: '100%' }} required />
+
+            {/* Password */}
+            <div style={{ marginBottom: 28 }}>
+              <label style={{
+                display: 'block', fontSize: 11,
+                color: theme.textPrimary, opacity: 0.6,
+                marginBottom: 7, letterSpacing: '0.06em',
+                fontWeight: 500
+              }}>
+                PASSWORD
+              </label>
+              <input
+                type="password"
+                value={form.password}
+                onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                placeholder="••••••••"
+                style={inputStyle}
+                required
+              />
             </div>
-            <button type="submit" disabled={loading}
-              style={{ width: '100%', padding: 13, background: '#c9a96e', border: 'none', borderRadius: 10, color: '#0e0e10', fontSize: 15, fontWeight: 600, opacity: loading ? 0.7 : 1 }}>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%', padding: '13px',
+                background: theme.accent,
+                border: 'none', borderRadius: 12,
+                color: dark ? '#000000' : '#ffffff',
+                fontSize: 15, fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                transition: 'opacity 0.2s',
+                fontFamily: 'DM Sans, sans-serif'
+              }}
+              onMouseOver={e => { if (!loading) e.target.style.opacity = 0.85 }}
+              onMouseOut={e => { if (!loading) e.target.style.opacity = 1 }}>
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
-          <p style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: '#666' }}>
+
+          {/* Divider */}
+          <div style={{
+            display: 'flex', alignItems: 'center',
+            gap: 12, margin: '24px 0'
+          }}>
+            <div style={{ flex: 1, height: 1, background: theme.cardBorder }} />
+            <span style={{ fontSize: 12, color: theme.textPrimary, opacity: 0.4 }}>or</span>
+            <div style={{ flex: 1, height: 1, background: theme.cardBorder }} />
+          </div>
+
+          <p style={{ textAlign: 'center', fontSize: 13, color: theme.textPrimary, opacity: 0.6 }}>
             Don't have an account?{' '}
-            <Link to="/register" style={{ color: '#c9a96e', textDecoration: 'none' }}>Create one</Link>
+            <Link to="/register" style={{
+              color: theme.accent,
+              textDecoration: 'none',
+              fontWeight: 500,
+              opacity: 1
+            }}>
+              Create one
+            </Link>
           </p>
         </div>
+
+        {/* Footer */}
+        <p style={{
+          textAlign: 'center', marginTop: 24,
+          fontSize: 12, color: theme.textPrimary,
+          opacity: 0.35
+        }}>
+          Your data is private and secure 🔒
+        </p>
       </div>
     </div>
   );

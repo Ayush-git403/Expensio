@@ -65,7 +65,7 @@ export default function Home() {
               fontSize: 34, color: theme.textPrimary,
               fontWeight: 400, letterSpacing: '-0.5px'
             }}>
-              Welcome back, {user?.name?.split(' ')[0]} 👋
+              Welcome back, {user?.name?.split(' ')[0]} !
             </h1>
             <p style={{ color: theme.textPrimary, fontSize: 14, marginTop: 6, opacity: 0.7 }}>
               Track and manage your expenses by month

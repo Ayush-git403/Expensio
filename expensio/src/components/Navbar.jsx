@@ -94,7 +94,7 @@ export default function Navbar() {
                   justifyContent: "center",
                   fontSize: 11,
                   fontWeight: 600,
-                  color: "#fff",
+                  color: dark ? "#000000" : "#ffffff", // ← black text in dark mode
                 }}
               >
                 {user.name[0].toUpperCase()}
