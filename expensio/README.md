@@ -233,12 +233,11 @@ Both services **auto-deploy on every `git push origin main`** — no manual step
 **Backend → Render**
 - Root Directory: `expensio/server`
 - Start Command: `node index.js`
-- Env vars: `MONGO_URI` · `JWT_SECRET` · `NODE_ENV=production`
 
 **Frontend → Vercel**
 - Root Directory: `expensio`
 - Framework: Vite
-- Env var: `VITE_API_URL=https://your-backend.onrender.com/api`
+
 
 ---
 
