@@ -1,518 +1,332 @@
 <div align="center">
 
-# Expensio 💸
+# 💸 Expensio
 
-**A full-stack personal expense tracking application**
+### A full-stack personal expense tracking application
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-expensio--chi.vercel.app-black?style=for-the-badge&logo=vercel)](https://expensio-chi.vercel.app)
-[![Backend](https://img.shields.io/badge/API-Render-purple?style=for-the-badge&logo=render)](https://expensio-api-izqf.onrender.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Ayush--git403%2FExpensio-181717?style=for-the-badge&logo=github)](https://github.com/Ayush-git403/Expensio)
 
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-22-339933?logo=node.js&logoColor=white)
-![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![React](https://img.shields.io/badge/React_18-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB_Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)
 
 </div>
 
 ---
 
-## What is Expensio?
+## 📌 What is Expensio?
 
-Expensio is a production-deployed full-stack web application for personal expense management. It lets users register, log in securely, and track their expenses month by month across a yearly calendar view. All data is persisted in the cloud — accessible from any device, any time.
-
-**Built as a learning project** to cover the entire MERN stack from scratch — local development, authentication, database design, API design, responsive UI, and cloud deployment.
+Expensio is a production-deployed full-stack web application for personal expense management. Users can register, log in securely, and track their expenses month by month on a clean yearly calendar view. All data is persisted in the cloud and accessible from any device.
 
 ---
 
-## Live Demo
+## ✨ Features
 
-| Service | URL |
-|---------|-----|
-| Frontend | https://expensio-chi.vercel.app |
-| Backend API | https://expensio-api-izqf.onrender.com |
-| API Health | https://expensio-api-izqf.onrender.com/ |
-
-> **Note:** The backend runs on Render's free tier and may take ~50 seconds to wake up after inactivity. Subsequent requests are fast.
-
----
-
-## Features
-
-### User Authentication
-- Register with name, email and password
-- Login returns a secure session via HttpOnly cookie
-- Session persists across page refreshes via `/api/auth/me`
-- Session clears on browser close (session cookies, not persistent)
-- Logout clears the cookie on the server side
-
-### Expense Tracking
-- Add expenses with name, amount, category, date and optional note
-- 10 categories: Food, Transport, Housing, Health, Entertainment, Shopping, Education, Travel, Utilities, Other
-- Edit and delete any expense inline
-- All data scoped to the logged-in user — no shared data between accounts
-
-### Yearly Calendar View
-- Visual 12-month grid showing total spending per month
-- Progress bar showing each month relative to the peak spending month
-- Year navigation (go back/forward by year)
-- Current month highlighted with a "NOW" badge
-- Summary cards: Total Spent, Active Months, Monthly Average, Busiest Month
-
-### Monthly Expense View
-- Click any month to see all expenses for that month
-- Running total at the top
-- Category color badges on each expense
-- Inline add, edit and delete — no page navigation needed
-
-### UI & Design
-- **Dark / Light theme toggle** — preference saved in `localStorage`
-- **Fully responsive** — works on mobile, tablet, and desktop
-- Mobile hamburger menu, 2-col grid on phone, 4-col grid on desktop
-- High-contrast black navbar on both themes
-- DM Sans + DM Serif Display typography
+- 🔐 **Secure Authentication** — Register and login with JWT stored in HttpOnly cookies
+- 📅 **Yearly Calendar View** — 12-month grid showing total spending per month with progress bars
+- 📋 **Monthly Expense View** — Click any month to view, add, edit and delete expenses
+- 🏷️ **10 Expense Categories** — Food, Transport, Housing, Health, Entertainment, Shopping, Education, Travel, Utilities, Other
+- 📊 **Summary Dashboard** — Total spent, active months, monthly average, busiest month
+- 🌙 **Dark / Light Theme** — Toggle with preference saved in `localStorage`
+- 📱 **Fully Responsive** — Works on mobile, tablet and desktop
+- 🔒 **Session Security** — Session cookies cleared on browser close
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-### Frontend
-| Technology | Purpose |
-|-----------|---------|
-| React 18 | Component-based UI framework |
-| Vite | Build tool and dev server |
-| React Router DOM | Client-side page routing |
-| Axios | HTTP client with interceptors |
-| Recharts | Pie and bar chart visualizations |
-| DM Sans + DM Serif | Google Fonts typography |
+### ⚛️ Frontend
 
-### Backend
-| Technology | Purpose |
-|-----------|---------|
-| Node.js | JavaScript runtime |
-| Express.js | Web framework and REST API |
-| Mongoose | MongoDB ODM (schema + queries) |
-| bcryptjs | Password hashing (salted) |
-| jsonwebtoken | JWT generation and verification |
-| cookie-parser | Read HttpOnly cookies on requests |
-| dotenv | Environment variable management |
-| nodemon | Auto-restart server on file changes |
+**React 18** powers the entire UI as a single-page application. **Vite** is used as the build tool for fast development and optimized production builds. **React Router DOM** handles client-side navigation between pages. **Axios** manages all HTTP requests to the backend with automatic cookie handling. **Recharts** renders the pie and bar charts on the dashboard. Google Fonts **DM Sans** and **DM Serif Display** are used for typography.
 
-### Database & Deployment
-| Technology | Purpose |
-|-----------|---------|
-| MongoDB Atlas | Cloud-hosted NoSQL database |
-| Vercel | Frontend hosting with CDN |
-| Render | Backend Node.js server hosting |
-| GitHub | Source control and CI/CD trigger |
+### 🟢 Backend
+
+**Node.js** is the runtime environment. **Express.js** handles all routing and middleware. **Mongoose** provides schema-based modelling on top of MongoDB. **bcryptjs** hashes all passwords before storing them — plain-text passwords are never saved. **jsonwebtoken** signs and verifies JWTs for authentication. **cookie-parser** reads the HttpOnly cookie on every incoming request. **dotenv** manages environment variables locally.
+
+### ☁️ Database & Deployment
+
+**MongoDB Atlas** is the cloud-hosted NoSQL database storing users and expenses. The **frontend is hosted on Vercel** with automatic deployments on every GitHub push. The **backend is hosted on Render** as a Node.js web service. Both platforms watch the GitHub `main` branch — pushing code auto-deploys to production.
 
 ---
 
-## Project Architecture
-
-```
-User Browser
-     │
-     │  HTTPS + HttpOnly Cookie (JWT)
-     ▼
-┌─────────────────────────────────────────┐
-│           React App (Vercel)            │
-│  ┌──────────┐  ┌──────────┐  ┌───────┐ │
-│  │  Pages   │  │Components│  │Context│ │
-│  │ Login    │  │ Navbar   │  │ Auth  │ │
-│  │ Register │  │MonthView │  │ Theme │ │
-│  │ Home     │  │Protected │  │ axios │ │
-│  └──────────┘  └──────────┘  └───────┘ │
-└────────────────────┬────────────────────┘
-                     │ REST API (JSON)
-                     │ withCredentials: true
-                     ▼
-┌─────────────────────────────────────────┐
-│         Express Server (Render)         │
-│  ┌──────────┐  ┌──────────┐  ┌───────┐ │
-│  │  Routes  │  │Middleware│  │Models │ │
-│  │/api/auth │  │  auth    │  │ User  │ │
-│  │/api/     │  │  CORS    │  │Expense│ │
-│  │expenses  │  │  cookie  │  │       │ │
-│  └──────────┘  └──────────┘  └───────┘ │
-└────────────────────┬────────────────────┘
-                     │ Mongoose ODM
-                     ▼
-┌─────────────────────────────────────────┐
-│          MongoDB Atlas (Cloud)          │
-│  ┌──────────────┐  ┌──────────────────┐ │
-│  │    users     │  │    expenses      │ │
-│  │ name         │  │ userId (ref)     │ │
-│  │ email        │  │ name             │ │
-│  │ password     │  │ amount           │ │
-│  │ (hashed)     │  │ category         │ │
-│  └──────────────┘  │ date  note       │ │
-│                    └──────────────────┘ │
-└─────────────────────────────────────────┘
-```
-
-### Request Flow (Authenticated)
-
-```
-1. User visits expensio-chi.vercel.app
-2. AuthContext calls GET /api/auth/me
-3. Browser auto-sends HttpOnly cookie
-4. authMiddleware verifies JWT in cookie
-5. Returns user object → user stays logged in
-6. User clicks March → GET /api/expenses?month=3&year=2026
-7. Backend filters expenses by userId + month/year
-8. Returns JSON array → MonthView renders the list
-```
-
-### Authentication Flow
-
-```
-Register / Login
-      │
-      ▼
-POST /api/auth/login
-      │
-      ├─ Find user in MongoDB
-      ├─ bcrypt.compare(password, hash)
-      ├─ jwt.sign({ id: userId }, JWT_SECRET)
-      └─ res.cookie('expensio_token', token, { httpOnly: true, secure: true, sameSite: 'none' })
-                                │
-                                ▼
-                   Token stored in HttpOnly cookie
-                   (JavaScript cannot access it)
-                                │
-                      Every subsequent request
-                                │
-                                ▼
-                   Browser auto-sends cookie
-                                │
-                                ▼
-                   authMiddleware → jwt.verify()
-                                │
-                                ▼
-                   req.user = { id } → fetch user data
-```
-
----
-
-## Folder Structure
+## 📂 Project Structure
 
 ```
 Expensio/
-├── expensio/                    ← React frontend (Vite)
+│
+├── expensio/                        ← React Frontend (Vite)
 │   ├── src/
 │   │   ├── api/
-│   │   │   └── axios.js         ← Axios instance with credentials
+│   │   │   └── axios.js             ← Axios instance with credentials
+│   │   │
 │   │   ├── components/
-│   │   │   ├── Navbar.jsx       ← Sticky top bar with theme toggle
-│   │   │   ├── MonthView.jsx    ← Monthly expense list + add form
-│   │   │   └── ProtectedRoute.jsx ← Auth guard for private pages
+│   │   │   ├── Navbar.jsx           ← Sticky top bar with theme toggle
+│   │   │   ├── MonthView.jsx        ← Monthly expense list + add form
+│   │   │   └── ProtectedRoute.jsx   ← Auth guard for private pages
+│   │   │
 │   │   ├── context/
-│   │   │   ├── AuthContext.jsx  ← Global user state + session check
-│   │   │   └── ThemeContext.jsx ← Dark/light theme token system
+│   │   │   ├── AuthContext.jsx      ← Global user state + session check
+│   │   │   └── ThemeContext.jsx     ← Dark/light theme token system
+│   │   │
 │   │   ├── hooks/
-│   │   │   └── useWindowSize.js ← Responsive breakpoint hook
+│   │   │   └── useWindowSize.js     ← Responsive breakpoint hook
+│   │   │
 │   │   ├── pages/
-│   │   │   ├── Login.jsx        ← Login form
-│   │   │   ├── Register.jsx     ← Registration form
-│   │   │   └── Home.jsx         ← Yearly calendar dashboard
+│   │   │   ├── Login.jsx            ← Login page
+│   │   │   ├── Register.jsx         ← Registration page
+│   │   │   └── Home.jsx             ← Yearly calendar dashboard
+│   │   │
 │   │   ├── utils/
-│   │   │   └── helpers.js       ← Categories, colors, formatINR
-│   │   ├── App.jsx              ← Router + context providers
-│   │   ├── App.css              ← Global styles + fonts
-│   │   └── main.jsx             ← React DOM entry point
-│   ├── vercel.json              ← SPA routing rewrite rule
+│   │   │   └── helpers.js           ← Categories, colors, formatINR
+│   │   │
+│   │   ├── App.jsx                  ← Router + context providers
+│   │   ├── App.css                  ← Global styles + fonts
+│   │   └── main.jsx                 ← React DOM entry point
+│   │
+│   ├── vercel.json                  ← SPA routing rewrite rule
 │   ├── vite.config.js
 │   └── package.json
 │
-└── server/                      ← Node.js + Express backend
+└── server/                          ← Node.js + Express Backend
     ├── middleware/
-    │   └── authMiddleware.js    ← JWT verification on protected routes
+    │   └── authMiddleware.js        ← JWT verification on protected routes
+    │
     ├── models/
-    │   ├── User.js              ← Mongoose user schema
-    │   └── Expense.js           ← Mongoose expense schema
+    │   ├── User.js                  ← Mongoose user schema
+    │   └── Expense.js               ← Mongoose expense schema
+    │
     ├── routes/
-    │   ├── auth.js              ← /register /login /logout /me
-    │   └── expenses.js          ← CRUD + month/year filtering
-    ├── .env                     ← Local secrets (gitignored)
-    ├── index.js                 ← Express app entry point
+    │   ├── auth.js                  ← /register /login /logout /me
+    │   └── expenses.js              ← CRUD + month/year filtering
+    │
+    ├── .env                         ← Local secrets (gitignored)
+    ├── index.js                     ← Express app entry point
     └── package.json
 ```
 
 ---
 
-## API Endpoints
+## 🔄 Application Flow
 
-### Auth Routes — `/api/auth`
+```mermaid
+flowchart TD
+    User(["👤 User"])
 
-| Method | Route | Description | Auth Required |
-|--------|-------|-------------|---------------|
-| `POST` | `/register` | Create new account, sets cookie | No |
-| `POST` | `/login` | Login, sets HttpOnly cookie | No |
-| `POST` | `/logout` | Clear session cookie | No |
-| `GET` | `/me` | Get current user from cookie | Cookie |
+    User -->|Opens app| A
 
-### Expense Routes — `/api/expenses`
+    subgraph Frontend ["⚛️ React App"]
+        A[Login / Register]
+        B[Yearly Calendar Home]
+        C[Monthly Expense View]
+        D[Add / Edit Expense]
+    end
 
-| Method | Route | Description | Auth Required |
-|--------|-------|-------------|---------------|
-| `GET` | `/` | Get all expenses for user | JWT Cookie |
-| `GET` | `/?month=3&year=2026` | Filter by month and year | JWT Cookie |
-| `GET` | `/?year=2026` | Filter by year only | JWT Cookie |
-| `POST` | `/` | Create new expense | JWT Cookie |
-| `PUT` | `/:id` | Update expense by ID | JWT Cookie |
-| `DELETE` | `/:id` | Delete expense by ID | JWT Cookie |
+    subgraph Backend ["🟢 Express Server"]
+        E[Auth Routes]
+        F[Expense Routes]
+        G[Auth Middleware]
+    end
 
-### Example Request
+    subgraph Database ["🍃 MongoDB Atlas"]
+        H[(users)]
+        I[(expenses)]
+    end
 
-```javascript
-// GET expenses for March 2026
-GET https://expensio-api-izqf.onrender.com/api/expenses?month=3&year=2026
-Cookie: expensio_token=eyJhbGciOiJIUzI1NiJ9...
+    A -->|Login / Register| E
+    E -->|Set HttpOnly Cookie| A
+    A -->|Success| B
 
-// Response
-[
-  {
-    "_id": "67b1...",
-    "userId": "67a0...",
-    "name": "Groceries",
-    "amount": 1200,
-    "category": "Food",
-    "date": "2026-03-05T00:00:00.000Z",
-    "note": "Big Bazaar weekly shop"
-  }
-]
+    B -->|Request expenses by year| G
+    G -->|JWT verified| F
+    F -->|Query userId + year| I
+    I -->|Expenses data| B
+
+    B -->|Click a month| C
+    C -->|Request expenses by month| G
+    G -->|JWT verified| F
+    F -->|Query userId + month| I
+    I -->|Monthly expenses| C
+
+    C -->|Submit form| D
+    D -->|POST expense| G
+    G -->|JWT verified| F
+    F -->|Save| I
+
+    E -->|Register / Login| H
+    User -->|Logout| E
+    E -->|Clear cookie| User
 ```
 
 ---
 
-## Database Schema
+## 🏗️ Project Architecture
 
-### User
+```mermaid
+graph TB
+    subgraph Browser ["🌐 Browser"]
+        Cookie["🍪 HttpOnly Cookie\nJWT Token"]
+        ReactApp["⚛️ React SPA"]
+    end
 
-```javascript
-{
-  name:      String  (required, trimmed),
-  email:     String  (required, unique, lowercase),
-  password:  String  (required, bcrypt hashed),
-  createdAt: Date    (auto),
-  updatedAt: Date    (auto)
-}
-```
+    subgraph Vercel ["▲ Vercel"]
+        Static["Static Build\nHTML · JS · CSS"]
+    end
 
-### Expense
+    subgraph Render ["🟣 Render"]
+        Express["Express Server"]
+        MW["Middleware\nCORS · Auth · Cookie"]
+        Routes["API Routes\n/auth  /expenses"]
+    end
 
-```javascript
-{
-  userId:    ObjectId  (ref: 'User', required),
-  name:      String    (required, trimmed),
-  amount:    Number    (required),
-  category:  String    (enum: 10 categories),
-  date:      Date      (required),
-  note:      String    (default: ''),
-  createdAt: Date      (auto),
-  updatedAt: Date      (auto)
-}
-```
+    subgraph Atlas ["🍃 MongoDB Atlas"]
+        Users[("users")]
+        Expenses[("expenses")]
+    end
 
----
-
-## Security Implementation
-
-### HttpOnly Cookies vs localStorage
-
-```
-localStorage (less secure):
-  ✗ Accessible by JavaScript
-  ✗ Vulnerable to XSS attacks
-  ✗ Stolen by malicious scripts
-
-HttpOnly Cookie (used in Expensio):
-  ✓ JavaScript cannot read it
-  ✓ XSS attacks cannot steal the token
-  ✓ Browser sends it automatically on every request
-  ✓ Cleared on browser close (session cookie)
-```
-
-### Cookie Options
-
-```javascript
-const COOKIE_OPTIONS = {
-  httpOnly: true,     // JS cannot access
-  secure: true,       // HTTPS only (production)
-  sameSite: 'none',   // Required for cross-domain (Vercel ↔ Render)
-  // No maxAge = session cookie, cleared on browser close
-};
-```
-
-### CORS Setup
-
-```javascript
-// Dynamic origin whitelist — allows all *.vercel.app subdomains
-const corsOptions = {
-  origin: function(origin, callback) {
-    const isVercel = origin?.endsWith('.vercel.app');
-    const isLocalhost = origin?.includes('localhost');
-    if (isVercel || isLocalhost) callback(null, true);
-    else callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,   // Required for cookies
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-};
+    Browser -->|Load app| Vercel
+    Vercel -->|Serve React build| ReactApp
+    ReactApp -->|API calls| MW
+    Cookie -.->|Auto-sent with every request| MW
+    MW --> Routes
+    Routes -->|Read / Write| Users
+    Routes -->|Read / Write| Expenses
 ```
 
 ---
 
-## Local Development Setup
+## 🔐 Authentication Flow
 
-### Prerequisites
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as React Frontend
+    participant B as Express Backend
+    participant DB as MongoDB
 
-- Node.js v18+
-- MongoDB Atlas account (free tier)
-- Git
+    U->>F: Enter email + password
+    F->>B: POST /api/auth/login
+    B->>DB: Find user by email
+    DB-->>B: Return user
+    B->>B: bcrypt.compare(password, hash)
+    B->>B: jwt.sign({ id: userId })
+    B-->>F: Set HttpOnly Cookie
+    F-->>U: Redirect to Home
 
-### 1. Clone the repository
+    Note over F,B: Every page load / request
 
+    F->>B: GET /api/auth/me (cookie auto-sent)
+    B->>B: jwt.verify(token)
+    B-->>F: Return user data
+    F-->>U: Stay logged in
+
+    U->>F: Click Logout
+    F->>B: POST /api/auth/logout
+    B-->>F: Clear cookie
+    F-->>U: Redirect to Login
+```
+
+---
+
+## 🗄️ Database Schema
+
+```mermaid
+erDiagram
+    USER {
+        ObjectId _id PK
+        String name
+        String email
+        String password
+        Date createdAt
+    }
+
+    EXPENSE {
+        ObjectId _id PK
+        ObjectId userId FK
+        String name
+        Number amount
+        String category
+        Date date
+        String note
+        Date createdAt
+    }
+
+    USER ||--o{ EXPENSE : "has many"
+```
+
+---
+
+## 🚀 Local Setup
+
+**1. Clone the repo**
 ```bash
 git clone https://github.com/Ayush-git403/Expensio.git
 cd Expensio/expensio
 ```
 
-### 2. Setup the backend
-
+**2. Setup backend**
 ```bash
 cd server
 npm install
 ```
 
 Create `server/.env`:
-
-```env
+```
 PORT=5000
-MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/expensio
-JWT_SECRET=your_super_secret_key_here
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_secret_key
 NODE_ENV=development
 ```
 
-Start the backend:
-
 ```bash
 npm run dev
-# ✅ MongoDB connected
-# 🚀 Server running on port 5000
 ```
 
-### 3. Setup the frontend
-
+**3. Setup frontend**
 ```bash
-cd ..   # back to expensio/
+cd ..
 npm install
 ```
 
-Create `expensio/.env.local`:
-
-```env
+Create `.env.local`:
+```
 VITE_API_URL=http://localhost:5000/api
 ```
 
-Start the frontend:
-
 ```bash
 npm run dev
-# → Local: http://localhost:5173
-```
-
-### 4. Open the app
-
-Visit `http://localhost:5173` → Register a new account → Start tracking!
-
----
-
-## Deployment
-
-### Backend → Render
-
-| Setting | Value |
-|---------|-------|
-| Root Directory | `expensio/server` |
-| Build Command | `npm install` |
-| Start Command | `node index.js` |
-| Environment Variables | `MONGO_URI`, `JWT_SECRET`, `NODE_ENV=production` |
-
-### Frontend → Vercel
-
-| Setting | Value |
-|---------|-------|
-| Root Directory | `expensio` |
-| Framework | Vite |
-| Build Command | `npm run build` |
-| Output Directory | `dist` |
-| Environment Variables | `VITE_API_URL=https://your-render-url.onrender.com/api` |
-
-### Auto-deploy on push
-
-Both Render and Vercel watch the GitHub `main` branch. Every `git push` triggers an automatic redeploy — no manual steps needed.
-
-```bash
-# Make changes locally → test → push
-git add .
-git commit -m "feat: your change"
-git push origin main
-# Both services redeploy automatically in ~2 minutes ✅
+# → http://localhost:5173
 ```
 
 ---
 
-## Environment Variables
+## 🌍 Deployment
 
-### Backend (`server/.env`)
+Both services **auto-deploy on every `git push origin main`** — no manual steps needed.
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `PORT` | Server port | `5000` |
-| `MONGO_URI` | MongoDB Atlas connection string | `mongodb+srv://...` |
-| `JWT_SECRET` | Secret key for signing JWTs | `your_secret_key` |
-| `NODE_ENV` | Environment mode | `development` / `production` |
+**Backend → Render**
+- Root Directory: `expensio/server`
+- Start Command: `node index.js`
+- Env vars: `MONGO_URI` · `JWT_SECRET` · `NODE_ENV=production`
 
-### Frontend (`.env.local`)
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `VITE_API_URL` | Backend API base URL | `http://localhost:5000/api` |
-
-> Never commit `.env` files. They are listed in `.gitignore`.
+**Frontend → Vercel**
+- Root Directory: `expensio`
+- Framework: Vite
+- Env var: `VITE_API_URL=https://your-backend.onrender.com/api`
 
 ---
 
-## What I Learned Building This
-
-- **React** — components, hooks, Context API, React Router, custom hooks
-- **Node.js + Express** — REST API design, middleware, route protection
-- **MongoDB + Mongoose** — schema design, CRUD operations, query filtering
-- **Authentication** — JWT tokens, bcrypt hashing, HttpOnly cookies, session management
-- **Security** — CORS configuration, XSS prevention, `.env` secret management
-- **Deployment** — Vercel (frontend), Render (backend), environment variables in production
-- **Debugging** — CORS errors, 404 routing issues, redirect loops, Git case-sensitivity on Windows
-- **Responsive Design** — custom breakpoint hooks, mobile-first layouts, hamburger menus
-
----
-
-## Future Improvements
+## 📈 Future Improvements
 
 - [ ] Export expenses to CSV
-- [ ] Budget alerts (push notifications when nearing limit)
+- [ ] Budget alerts when nearing monthly limit
 - [ ] Recurring expense templates
-- [ ] Multi-currency support
-- [ ] Google / GitHub OAuth login
-- [ ] Charts on the monthly view (category breakdown pie chart)
+- [ ] Google OAuth login
+- [ ] Charts on the monthly expense view
 - [ ] Search and filter expenses by keyword
-
----
-
-## License
-
-MIT — free to use, modify, and distribute.
 
 ---
 
@@ -520,6 +334,6 @@ MIT — free to use, modify, and distribute.
 
 Built with ❤️ by **Ayush** · March 2026
 
-[Live App](https://expensio-chi.vercel.app) · [GitHub](https://github.com/Ayush-git403/Expensio) · [API](https://expensio-api-izqf.onrender.com)
+[Live App](https://expensio-chi.vercel.app) · [GitHub Repo](https://github.com/Ayush-git403/Expensio)
 
 </div>
