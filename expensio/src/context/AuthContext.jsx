@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import API from '../api/axios';
+import { createContext, useContext, useState, useEffect } from "react";
+import API from "../api/axios";
 
 const AuthContext = createContext();
 
@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
   async function checkSession() {
     try {
-      const { data } = await API.get('/auth/me');
+      const { data } = await API.get("/auth/me");
       setUser(data);
     } catch (err) {
       setUser(null);
@@ -30,7 +30,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      await API.post('/auth/logout');
+      await API.post("/auth/logout");
     } catch (err) {
       console.error(err);
     } finally {
@@ -40,21 +40,25 @@ export function AuthProvider({ children }) {
 
   // Show nothing while checking session
   if (loading) {
-  return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#0a0a0a',
-      fontFamily: 'DM Sans, sans-serif',
-      color: '#ffffff',
-      fontSize: 18
-    }}>
-      Loading Expensio...
-    </div>
-  );
-}
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#1a1a1a",
+          fontFamily: "DM Sans, sans-serif",
+          color: "#ffffff",
+          fontSize: 18,
+          letterSpacing: "-0.3px",
+          fontWeight: 600,
+        }}
+      >
+        Expensio
+      </div>
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

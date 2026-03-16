@@ -11,16 +11,16 @@ body {
 .serif { font-family: 'DM Serif Display', serif; }
 
 input, select {
-  border: 1px solid #5a647a;
+  border: 1px solid #e0e0e0;
   color: inherit;
   padding: 10px 14px;
   border-radius: 10px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans, sans-serif';
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s, background 0.3s;
 }
 
-input:focus, select:focus { border-color: #008DD5; }
-select option { background: #373F51; color: #fff; }
+input:focus, select:focus { border-color: #000; }
+select option { background: #fff; color: #000; }
 button { cursor: pointer; font-family: 'DM Sans', sans-serif; }

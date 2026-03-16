@@ -39,20 +39,13 @@ export default function Home() {
     }
   }
 
-  const totalYear = Object.values(monthlyTotals).reduce((s, v) => s + v, 0);
-  const maxMonth  = Math.max(...Object.values(monthlyTotals), 1);
+  const totalYear   = Object.values(monthlyTotals).reduce((s, v) => s + v, 0);
+  const maxMonth    = Math.max(...Object.values(monthlyTotals), 1);
   const activeMonths = Object.keys(monthlyTotals).length;
 
-  const padding = isMobile ? '16px 14px' : '28px 20px';
-  const gridCols = isMobile
-    ? 'repeat(2, 1fr)'
-    : isTablet
-    ? 'repeat(3, 1fr)'
-    : 'repeat(4, 1fr)';
-
-  const summaryGridCols = isMobile
-    ? 'repeat(2, 1fr)'
-    : 'repeat(4, 1fr)';
+  const padding      = isMobile ? '16px 14px' : '32px 40px';
+  const gridCols     = isMobile ? 'repeat(2,1fr)' : isTablet ? 'repeat(3,1fr)' : 'repeat(4,1fr)';
+  const summaryGridCols = isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)';
 
   if (selectedMonth !== null) {
     return (
@@ -65,29 +58,40 @@ export default function Home() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, transition: 'background 0.3s' }}>
-      <div style={{ maxWidth: 980, margin: '0 auto', padding }}>
+    <div style={{
+      minHeight: '100vh',
+      background: theme.bg,
+      transition: 'background 0.3s'
+    }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding }}>
 
-        {/* Header */}
+        {/* ── Header ── */}
         <div style={{
           display: 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'space-between',
           alignItems: isMobile ? 'flex-start' : 'center',
           gap: isMobile ? 16 : 0,
-          marginBottom: isMobile ? 20 : 32
+          marginBottom: isMobile ? 24 : 36
         }}>
           <div>
-            <h1 className="serif" style={{
-              fontSize: isMobile ? 26 : 34,
+            <h1 style={{
+              fontFamily: 'DM Sans, sans-serif',
+              fontSize: isMobile ? 24 : 32,
               color: theme.textPrimary,
-              fontWeight: 400, letterSpacing: '-0.5px',
+              fontWeight: 700,
+              letterSpacing: '-0.8px',
               lineHeight: 1.2
             }}>
-              Welcome back,{' '}
-              {user?.name?.split(' ')[0]} 👋
+              Welcome back, {user?.name?.split(' ')[0]} 👋
             </h1>
-            <p style={{ color: theme.textPrimary, fontSize: 13, marginTop: 6, opacity: 0.6 }}>
+            <p style={{
+              fontFamily: 'DM Sans, sans-serif',
+              color: theme.textMuted,
+              fontSize: 13,
+              marginTop: 6,
+              fontWeight: 300
+            }}>
               Track and manage your expenses by month
             </p>
           </div>
@@ -99,11 +103,21 @@ export default function Home() {
               border: `1px solid ${theme.cardBorder}`,
               color: theme.textPrimary,
               padding: isMobile ? '6px 12px' : '8px 16px',
-              borderRadius: 10, fontSize: 18, cursor: 'pointer'
-            }}>‹</button>
-            <span className="serif" style={{
-              fontSize: isMobile ? 22 : 26,
-              color: theme.accent, minWidth: 56, textAlign: 'center'
+              borderRadius: 8, fontSize: 18,
+              cursor: 'pointer', transition: 'all 0.2s',
+              fontFamily: 'DM Sans, sans-serif'
+            }}
+              onMouseOver={e => e.currentTarget.style.background = theme.accent === '#000000' ? '#f0f0f0' : '#222'}
+              onMouseOut={e => e.currentTarget.style.background = theme.cardBg}>
+              ‹
+            </button>
+            <span style={{
+              fontFamily: 'DM Sans, sans-serif',
+              fontSize: isMobile ? 20 : 24,
+              color: theme.textPrimary,
+              fontWeight: 700,
+              minWidth: 56, textAlign: 'center',
+              letterSpacing: '-0.5px'
             }}>
               {year}
             </span>
@@ -112,54 +126,87 @@ export default function Home() {
               border: `1px solid ${theme.cardBorder}`,
               color: theme.textPrimary,
               padding: isMobile ? '6px 12px' : '8px 16px',
-              borderRadius: 10, fontSize: 18, cursor: 'pointer'
-            }}>›</button>
+              borderRadius: 8, fontSize: 18,
+              cursor: 'pointer', transition: 'all 0.2s',
+              fontFamily: 'DM Sans, sans-serif'
+            }}
+              onMouseOver={e => e.currentTarget.style.background = theme.accent === '#000000' ? '#f0f0f0' : '#222'}
+              onMouseOut={e => e.currentTarget.style.background = theme.cardBg}>
+              ›
+            </button>
           </div>
         </div>
 
-        {/* Summary cards */}
+        {/* ── Summary Cards ── */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: summaryGridCols,
           gap: isMobile ? 10 : 14,
-          marginBottom: isMobile ? 16 : 28
+          marginBottom: isMobile ? 24 : 36
         }}>
           {[
-            { label: 'TOTAL SPENT', value: `₹${totalYear.toLocaleString('en-IN')}`, sub: `in ${year}`, color: theme.accent },
-            { label: 'ACTIVE MONTHS', value: activeMonths, sub: 'with expenses', color: theme.highlight },
-            { label: 'MONTHLY AVG', value: activeMonths ? `₹${Math.round(totalYear / activeMonths).toLocaleString('en-IN')}` : '₹0', sub: 'per month', color: theme.magenta },
+            {
+              label: 'TOTAL SPENT',
+              value: `₹${totalYear.toLocaleString('en-IN')}`,
+              sub: `in ${year}`,
+              color: theme.textPrimary
+            },
+            {
+              label: 'ACTIVE MONTHS',
+              value: activeMonths,
+              sub: 'with expenses',
+              color: theme.highlight
+            },
+            {
+              label: 'MONTHLY AVG',
+              value: activeMonths
+                ? `₹${Math.round(totalYear / activeMonths).toLocaleString('en-IN')}`
+                : '₹0',
+              sub: 'per month',
+              color: theme.textPrimary
+            },
             {
               label: 'BUSIEST MONTH',
               value: Object.keys(monthlyTotals).length
-                ? MONTHS[Number(Object.entries(monthlyTotals).sort((a, b) => b[1] - a[1])[0]?.[0])]?.slice(0, 3)
+                ? MONTHS[Number(Object.entries(monthlyTotals)
+                    .sort((a, b) => b[1] - a[1])[0]?.[0])]?.slice(0, 3)
                 : '—',
               sub: 'highest spending',
-              color: theme.almond
+              color: theme.textPrimary
             },
           ].map(c => (
             <div key={c.label} style={{
               background: theme.cardBg,
               border: `1px solid ${theme.cardBorder}`,
               borderRadius: isMobile ? 12 : 14,
-              padding: isMobile ? '14px 14px' : '20px 22px',
+              padding: isMobile ? '16px 14px' : '22px 20px',
               transition: 'background 0.3s'
             }}>
               <div style={{
-                fontSize: 10, color: theme.textPrimary,
-                opacity: 0.5, marginBottom: 6,
-                letterSpacing: '0.06em', fontWeight: 500
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: 10,
+                color: theme.textMuted,
+                letterSpacing: '0.08em',
+                fontWeight: 500,
+                marginBottom: 8
               }}>
                 {c.label}
               </div>
-              <div className="serif" style={{
+              <div style={{
+                fontFamily: 'DM Sans, sans-serif',
                 fontSize: isMobile ? 20 : 26,
-                color: c.color, letterSpacing: '-0.5px'
+                color: c.color,
+                fontWeight: 700,
+                letterSpacing: '-0.5px'
               }}>
                 {c.value}
               </div>
               <div style={{
-                fontSize: 11, color: theme.textPrimary,
-                opacity: 0.45, marginTop: 4
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: 11,
+                color: theme.textSubtle,
+                marginTop: 5,
+                fontWeight: 300
               }}>
                 {c.sub}
               </div>
@@ -167,20 +214,24 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Section label */}
+        {/* ── Section label ── */}
         <div style={{
-          fontSize: 11, color: theme.textPrimary,
-          opacity: 0.5, letterSpacing: '0.06em',
-          marginBottom: 12, fontWeight: 500
+          fontFamily: 'DM Sans, sans-serif',
+          fontSize: 11,
+          color: theme.textMuted,
+          letterSpacing: '0.1em',
+          fontWeight: 500,
+          marginBottom: 14
         }}>
           MONTHLY BREAKDOWN — TAP A MONTH TO VIEW EXPENSES
         </div>
 
-        {/* Monthly grid */}
+        {/* ── Monthly Grid ── */}
         {loading ? (
           <div style={{
-            textAlign: 'center', padding: '60px 0',
-            color: theme.textPrimary, opacity: 0.5
+            textAlign: 'center', padding: '80px 0',
+            fontFamily: 'DM Sans, sans-serif',
+            color: theme.textMuted, fontSize: 15
           }}>
             Loading...
           </div>
@@ -191,82 +242,118 @@ export default function Home() {
             gap: isMobile ? 10 : 14
           }}>
             {MONTHS.map((name, i) => {
-              const total = monthlyTotals[i] || 0;
-              const barWidth = total ? Math.round((total / maxMonth) * 100) : 0;
-              const isCurrent = i === new Date().getMonth() && year === new Date().getFullYear();
+              const total     = monthlyTotals[i] || 0;
+              const barWidth  = total ? Math.round((total / maxMonth) * 100) : 0;
+              const isCurrent = i === new Date().getMonth() &&
+                                year === new Date().getFullYear();
 
               return (
                 <div key={i} onClick={() => setSelectedMonth(i)}
                   style={{
-                    background: isCurrent
-                      ? (dark ? '#1e2d40' : '#e8f4fc')
-                      : theme.cardBg,
+                    background: theme.monthCardBg,
                     border: isCurrent
-                      ? `1.5px solid ${theme.accent}`
-                      : `1px solid ${theme.cardBorder}`,
+                      ? `2px solid ${theme.accent}`
+                      : `1px solid ${theme.monthCardBorder}`,
                     borderRadius: isMobile ? 12 : 14,
                     padding: isMobile ? '14px 14px' : '20px 20px',
                     cursor: 'pointer', position: 'relative',
                     transition: 'all 0.2s',
-                    opacity: !total && !isCurrent ? 0.6 : 1
+                    opacity: !total && !isCurrent ? 0.45 : 1
                   }}
                   onMouseOver={e => {
                     e.currentTarget.style.borderColor = theme.accent;
                     e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = dark
+                      ? '0 8px 24px rgba(255,255,255,0.06)'
+                      : '0 8px 24px rgba(0,0,0,0.08)';
                   }}
                   onMouseOut={e => {
-                    e.currentTarget.style.borderColor = isCurrent ? theme.accent : theme.cardBorder;
+                    e.currentTarget.style.borderColor = isCurrent
+                      ? theme.accent
+                      : theme.monthCardBorder;
                     e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
                   }}>
 
+                  {/* Current badge */}
                   {isCurrent && (
                     <div style={{
-                      position: 'absolute', top: 8, right: 8,
-                      fontSize: 9, color: theme.accent,
-                      background: dark ? '#0d1e2e' : '#d0eaf8',
-                      padding: '2px 7px', borderRadius: 99,
-                      border: `1px solid ${theme.accent}55`,
-                      fontWeight: 500
-                    }}>NOW</div>
+                      position: 'absolute', top: 10, right: 10,
+                      fontSize: 9,
+                      color: dark ? '#000000' : '#ffffff',
+                      background: theme.accent,
+                      padding: '3px 9px', borderRadius: 99,
+                      fontWeight: 700,
+                      fontFamily: 'DM Sans, sans-serif',
+                      letterSpacing: '0.05em'
+                    }}>
+                      NOW
+                    </div>
                   )}
 
+                  {/* Month name */}
                   <div style={{
+                    fontFamily: 'DM Sans, sans-serif',
                     fontSize: isMobile ? 12 : 13,
-                    color: theme.textPrimary,
-                    fontWeight: 600, marginBottom: 8
+                    color: theme.monthCardText,
+                    fontWeight: 700,
+                    marginBottom: 10,
+                    letterSpacing: '0.02em'
                   }}>
                     {isMobile ? name.slice(0, 3) : name}
                   </div>
 
-                  <div className="serif" style={{
-                    fontSize: isMobile ? 16 : 20,
-                    color: total ? theme.accent : theme.textPrimary,
-                    opacity: total ? 1 : 0.3,
+                  {/* Amount */}
+                  <div style={{
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: isMobile ? 18 : 22,
+                    color: total ? theme.monthCardText : theme.monthCardMuted,
+                    fontWeight: total ? 700 : 300,
                     marginBottom: isMobile ? 10 : 14,
-                    letterSpacing: '-0.3px'
+                    letterSpacing: '-0.5px',
+                    opacity: total ? 1 : 0.35
                   }}>
                     {total ? `₹${total.toLocaleString('en-IN')}` : '—'}
                   </div>
 
+                  {/* Progress bar */}
                   <div style={{
-                    background: theme.barTrack,
-                    borderRadius: 99, height: 4, overflow: 'hidden'
+                    background: dark ? '#e0e0e0' : '#f0f0f0',
+                    borderRadius: 99, height: 3,
+                    overflow: 'hidden'
                   }}>
                     <div style={{
                       width: barWidth + '%', height: '100%',
-                      background: barWidth > 75 ? theme.highlight : theme.accent,
-                      borderRadius: 99, transition: 'width 0.6s ease'
+                      background: barWidth > 75
+                        ? theme.highlight
+                        : theme.monthCardText,
+                      borderRadius: 99,
+                      transition: 'width 0.6s ease'
                     }} />
                   </div>
 
+                  {/* Footer */}
                   {!isMobile && (
                     <div style={{
-                      fontSize: 11, color: theme.textPrimary,
-                      opacity: 0.45, marginTop: 8,
-                      display: 'flex', justifyContent: 'space-between'
+                      fontFamily: 'DM Sans, sans-serif',
+                      fontSize: 11,
+                      color: theme.monthCardMuted,
+                      marginTop: 9,
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontWeight: 300
                     }}>
-                      <span>{total ? `${barWidth}% of peak` : 'No expenses'}</span>
-                      {total && <span style={{ color: theme.accent, opacity: 1 }}>View →</span>}
+                      <span>
+                        {total ? `${barWidth}% of peak` : 'No expenses'}
+                      </span>
+                      {total && (
+                        <span style={{
+                          color: theme.monthCardText,
+                          fontWeight: 600
+                        }}>
+                          View →
+                        </span>
+                      )}
                     </div>
                   )}
                 </div>
@@ -274,6 +361,7 @@ export default function Home() {
             })}
           </div>
         )}
+
       </div>
     </div>
   );
