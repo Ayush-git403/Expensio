@@ -1,6 +1,6 @@
 <div align="center">
 
-# 💸 Expensio
+#    Expensio
 
 ### A full-stack personal expense tracking application
 
@@ -110,58 +110,7 @@ Expensio/
 
 ---
 
-## 🔄 Application Flow
 
-```mermaid
-flowchart TD
-    User(["👤 User"])
-
-    User -->|Opens app| A
-
-    subgraph Frontend ["⚛️ React App"]
-        A[Login / Register]
-        B[Yearly Calendar Home]
-        C[Monthly Expense View]
-        D[Add / Edit Expense]
-    end
-
-    subgraph Backend ["🟢 Express Server"]
-        E[Auth Routes]
-        F[Expense Routes]
-        G[Auth Middleware]
-    end
-
-    subgraph Database ["🍃 MongoDB Atlas"]
-        H[(users)]
-        I[(expenses)]
-    end
-
-    A -->|Login / Register| E
-    E -->|Set HttpOnly Cookie| A
-    A -->|Success| B
-
-    B -->|Request expenses by year| G
-    G -->|JWT verified| F
-    F -->|Query userId + year| I
-    I -->|Expenses data| B
-
-    B -->|Click a month| C
-    C -->|Request expenses by month| G
-    G -->|JWT verified| F
-    F -->|Query userId + month| I
-    I -->|Monthly expenses| C
-
-    C -->|Submit form| D
-    D -->|POST expense| G
-    G -->|JWT verified| F
-    F -->|Save| I
-
-    E -->|Register / Login| H
-    User -->|Logout| E
-    E -->|Clear cookie| User
-```
-
----
 
 ## 🏗️ Project Architecture
 
@@ -231,33 +180,7 @@ sequenceDiagram
 
 ---
 
-## 🗄️ Database Schema
 
-```mermaid
-erDiagram
-    USER {
-        ObjectId _id PK
-        String name
-        String email
-        String password
-        Date createdAt
-    }
-
-    EXPENSE {
-        ObjectId _id PK
-        ObjectId userId FK
-        String name
-        Number amount
-        String category
-        Date date
-        String note
-        Date createdAt
-    }
-
-    USER ||--o{ EXPENSE : "has many"
-```
-
----
 
 ## 🚀 Local Setup
 
