@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useWindowSize } from '../hooks/useWindowSize';
 import API from '../api/axios';
 
 export default function Register() {
@@ -10,6 +11,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const { dark, theme } = useTheme();
+  const { isMobile } = useWindowSize();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -32,9 +34,9 @@ export default function Register() {
     background: theme.inputBg,
     border: `1px solid ${theme.cardBorder}`,
     color: theme.textPrimary,
-    padding: '10px 14px',
+    padding: '12px 14px',
     borderRadius: '10px',
-    fontSize: '14px',
+    fontSize: '15px',
     outline: 'none',
     fontFamily: 'DM Sans, sans-serif',
     colorScheme: dark ? 'dark' : 'light'
@@ -47,13 +49,17 @@ export default function Register() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      padding: '20px 16px',
       transition: 'background 0.3s'
     }}>
-      <div style={{ width: '100%', maxWidth: 440, padding: '0 20px' }}>
+      <div style={{ width: '100%', maxWidth: 440 }}>
 
         {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <span className="serif" style={{ fontSize: 42, color: theme.accent }}>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? 28 : 36 }}>
+          <span className="serif" style={{
+            fontSize: isMobile ? 36 : 42,
+            color: theme.accent
+          }}>
             Expensio
           </span>
           <p style={{
@@ -68,11 +74,11 @@ export default function Register() {
         <div style={{
           background: theme.cardBg,
           border: `1px solid ${theme.cardBorder}`,
-          borderRadius: 20, padding: '36px 32px',
+          borderRadius: isMobile ? 16 : 20,
+          padding: isMobile ? '24px 20px' : '36px 32px',
           transition: 'background 0.3s'
         }}>
 
-          {/* Error */}
           {error && (
             <div style={{
               background: theme.highlight + '22',
@@ -86,7 +92,6 @@ export default function Register() {
           )}
 
           <form onSubmit={handleSubmit}>
-
             {/* Name */}
             <div style={{ marginBottom: 18 }}>
               <label style={{
@@ -147,12 +152,12 @@ export default function Register() {
               />
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
               style={{
-                width: '100%', padding: '13px',
+                width: '100%',
+                padding: isMobile ? '14px' : '13px',
                 background: theme.accent,
                 border: 'none', borderRadius: 12,
                 color: dark ? '#000000' : '#ffffff',
@@ -161,49 +166,37 @@ export default function Register() {
                 opacity: loading ? 0.7 : 1,
                 transition: 'opacity 0.2s',
                 fontFamily: 'DM Sans, sans-serif'
-              }}
-              onMouseOver={e => { if (!loading) e.target.style.opacity = 0.85 }}
-              onMouseOut={e => { if (!loading) e.target.style.opacity = 1 }}>
+              }}>
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
 
-          {/* Divider */}
           <div style={{
             display: 'flex', alignItems: 'center',
             gap: 12, margin: '24px 0'
           }}>
             <div style={{ flex: 1, height: 1, background: theme.cardBorder }} />
-            <span style={{
-              fontSize: 12, color: theme.textPrimary,
-              opacity: 0.4
-            }}>
-              or
-            </span>
+            <span style={{ fontSize: 12, color: theme.textPrimary, opacity: 0.4 }}>or</span>
             <div style={{ flex: 1, height: 1, background: theme.cardBorder }} />
           </div>
 
           <p style={{
-            textAlign: 'center', fontSize: 13,
+            textAlign: 'center', fontSize: 14,
             color: theme.textPrimary, opacity: 0.6
           }}>
             Already have an account?{' '}
             <Link to="/login" style={{
               color: theme.accent,
-              textDecoration: 'none',
-              fontWeight: 500,
-              opacity: 1
+              textDecoration: 'none', fontWeight: 500
             }}>
               Sign in
             </Link>
           </p>
         </div>
 
-        {/* Footer */}
         <p style={{
-          textAlign: 'center', marginTop: 24,
-          fontSize: 12, color: theme.textPrimary,
-          opacity: 0.35
+          textAlign: 'center', marginTop: 20,
+          fontSize: 12, color: theme.textPrimary, opacity: 0.3
         }}>
           Your data is private and secure 🔒
         </p>

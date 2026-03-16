@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useWindowSize } from '../hooks/useWindowSize';
 import API from '../api/axios';
 import MonthView from '../components/MonthView';
 
@@ -13,6 +14,7 @@ const MONTHS = [
 export default function Home() {
   const { user } = useAuth();
   const { dark, theme } = useTheme();
+  const { isMobile, isTablet } = useWindowSize();
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthlyTotals, setMonthlyTotals] = useState({});
@@ -41,6 +43,17 @@ export default function Home() {
   const maxMonth  = Math.max(...Object.values(monthlyTotals), 1);
   const activeMonths = Object.keys(monthlyTotals).length;
 
+  const padding = isMobile ? '16px 14px' : '28px 20px';
+  const gridCols = isMobile
+    ? 'repeat(2, 1fr)'
+    : isTablet
+    ? 'repeat(3, 1fr)'
+    : 'repeat(4, 1fr)';
+
+  const summaryGridCols = isMobile
+    ? 'repeat(2, 1fr)'
+    : 'repeat(4, 1fr)';
+
   if (selectedMonth !== null) {
     return (
       <MonthView
@@ -53,94 +66,72 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: '100vh', background: theme.bg, transition: 'background 0.3s' }}>
-      <div style={{ maxWidth: 980, margin: '0 auto', padding: '32px 20px' }}>
+      <div style={{ maxWidth: 980, margin: '0 auto', padding }}>
 
         {/* Header */}
         <div style={{
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'center', marginBottom: 32
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          justifyContent: 'space-between',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          gap: isMobile ? 16 : 0,
+          marginBottom: isMobile ? 20 : 32
         }}>
           <div>
             <h1 className="serif" style={{
-              fontSize: 34, color: theme.textPrimary,
-              fontWeight: 400, letterSpacing: '-0.5px'
+              fontSize: isMobile ? 26 : 34,
+              color: theme.textPrimary,
+              fontWeight: 400, letterSpacing: '-0.5px',
+              lineHeight: 1.2
             }}>
-              Welcome back, {user?.name?.split(' ')[0]} !
+              Welcome back,{' '}
+              {user?.name?.split(' ')[0]} 👋
             </h1>
-            <p style={{ color: theme.textPrimary, fontSize: 14, marginTop: 6, opacity: 0.7 }}>
+            <p style={{ color: theme.textPrimary, fontSize: 13, marginTop: 6, opacity: 0.6 }}>
               Track and manage your expenses by month
             </p>
           </div>
 
-          {/* Year Selector */}
+          {/* Year selector */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button onClick={() => setYear(y => y - 1)}
-              style={{
-                background: theme.cardBg,
-                border: `1px solid ${theme.cardBorder}`,
-                color: theme.textPrimary,
-                padding: '8px 16px', borderRadius: 10,
-                fontSize: 18, cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseOver={e => e.currentTarget.style.borderColor = theme.accent}
-              onMouseOut={e => e.currentTarget.style.borderColor = theme.cardBorder}>
-              ‹
-            </button>
+            <button onClick={() => setYear(y => y - 1)} style={{
+              background: theme.cardBg,
+              border: `1px solid ${theme.cardBorder}`,
+              color: theme.textPrimary,
+              padding: isMobile ? '6px 12px' : '8px 16px',
+              borderRadius: 10, fontSize: 18, cursor: 'pointer'
+            }}>‹</button>
             <span className="serif" style={{
-              fontSize: 26, color: theme.accent,
-              minWidth: 64, textAlign: 'center'
+              fontSize: isMobile ? 22 : 26,
+              color: theme.accent, minWidth: 56, textAlign: 'center'
             }}>
               {year}
             </span>
-            <button onClick={() => setYear(y => y + 1)}
-              style={{
-                background: theme.cardBg,
-                border: `1px solid ${theme.cardBorder}`,
-                color: theme.textPrimary,
-                padding: '8px 16px', borderRadius: 10,
-                fontSize: 18, cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseOver={e => e.currentTarget.style.borderColor = theme.accent}
-              onMouseOut={e => e.currentTarget.style.borderColor = theme.cardBorder}>
-              ›
-            </button>
+            <button onClick={() => setYear(y => y + 1)} style={{
+              background: theme.cardBg,
+              border: `1px solid ${theme.cardBorder}`,
+              color: theme.textPrimary,
+              padding: isMobile ? '6px 12px' : '8px 16px',
+              borderRadius: 10, fontSize: 18, cursor: 'pointer'
+            }}>›</button>
           </div>
         </div>
 
-        {/* Summary Cards Row */}
+        {/* Summary cards */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 14, marginBottom: 28
+          gridTemplateColumns: summaryGridCols,
+          gap: isMobile ? 10 : 14,
+          marginBottom: isMobile ? 16 : 28
         }}>
           {[
-            {
-              label: 'TOTAL SPENT',
-              value: `₹${totalYear.toLocaleString('en-IN')}`,
-              sub: `in ${year}`,
-              color: theme.accent
-            },
-            {
-              label: 'ACTIVE MONTHS',
-              value: activeMonths,
-              sub: 'with expenses',
-              color: theme.highlight
-            },
-            {
-              label: 'MONTHLY AVERAGE',
-              value: activeMonths
-                ? `₹${Math.round(totalYear / activeMonths).toLocaleString('en-IN')}`
-                : '₹0',
-              sub: 'per active month',
-              color: theme.magenta
-            },
+            { label: 'TOTAL SPENT', value: `₹${totalYear.toLocaleString('en-IN')}`, sub: `in ${year}`, color: theme.accent },
+            { label: 'ACTIVE MONTHS', value: activeMonths, sub: 'with expenses', color: theme.highlight },
+            { label: 'MONTHLY AVG', value: activeMonths ? `₹${Math.round(totalYear / activeMonths).toLocaleString('en-IN')}` : '₹0', sub: 'per month', color: theme.magenta },
             {
               label: 'BUSIEST MONTH',
               value: Object.keys(monthlyTotals).length
-                ? MONTHS[Number(Object.entries(monthlyTotals)
-                    .sort((a,b) => b[1]-a[1])[0]?.[0])]?.slice(0,3)
+                ? MONTHS[Number(Object.entries(monthlyTotals).sort((a, b) => b[1] - a[1])[0]?.[0])]?.slice(0, 3)
                 : '—',
               sub: 'highest spending',
               color: theme.almond
@@ -149,25 +140,26 @@ export default function Home() {
             <div key={c.label} style={{
               background: theme.cardBg,
               border: `1px solid ${theme.cardBorder}`,
-              borderRadius: 14, padding: '20px 22px',
+              borderRadius: isMobile ? 12 : 14,
+              padding: isMobile ? '14px 14px' : '20px 22px',
               transition: 'background 0.3s'
             }}>
               <div style={{
-                fontSize: 11, color: theme.textPrimary,
-                opacity: 0.6,
-                marginBottom: 8, letterSpacing: '0.06em', fontWeight: 500
+                fontSize: 10, color: theme.textPrimary,
+                opacity: 0.5, marginBottom: 6,
+                letterSpacing: '0.06em', fontWeight: 500
               }}>
                 {c.label}
               </div>
               <div className="serif" style={{
-                fontSize: 26, color: c.color,
-                letterSpacing: '-0.5px'
+                fontSize: isMobile ? 20 : 26,
+                color: c.color, letterSpacing: '-0.5px'
               }}>
                 {c.value}
               </div>
               <div style={{
-                fontSize: 12, color: theme.textPrimary,
-                opacity: 0.5, marginTop: 4
+                fontSize: 11, color: theme.textPrimary,
+                opacity: 0.45, marginTop: 4
               }}>
                 {c.sub}
               </div>
@@ -175,133 +167,113 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Section Label */}
+        {/* Section label */}
+        <div style={{
+          fontSize: 11, color: theme.textPrimary,
+          opacity: 0.5, letterSpacing: '0.06em',
+          marginBottom: 12, fontWeight: 500
+        }}>
+          MONTHLY BREAKDOWN — TAP A MONTH TO VIEW EXPENSES
+        </div>
+
+        {/* Monthly grid */}
         {loading ? (
           <div style={{
-            textAlign: 'center', padding: '80px 0',
-            color: theme.textPrimary, fontSize: 15, opacity: 0.6
+            textAlign: 'center', padding: '60px 0',
+            color: theme.textPrimary, opacity: 0.5
           }}>
-            Loading your expenses...
+            Loading...
           </div>
         ) : (
-          <>
-            <div style={{
-              fontSize: 12, color: theme.textPrimary,
-              opacity: 0.55,
-              letterSpacing: '0.06em', marginBottom: 14,
-              fontWeight: 500
-            }}>
-              MONTHLY BREAKDOWN — CLICK A MONTH TO VIEW EXPENSES
-            </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: gridCols,
+            gap: isMobile ? 10 : 14
+          }}>
+            {MONTHS.map((name, i) => {
+              const total = monthlyTotals[i] || 0;
+              const barWidth = total ? Math.round((total / maxMonth) * 100) : 0;
+              const isCurrent = i === new Date().getMonth() && year === new Date().getFullYear();
 
-            {/* Monthly Grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))',
-              gap: 14
-            }}>
-              {MONTHS.map((name, i) => {
-                const total     = monthlyTotals[i] || 0;
-                const barWidth  = total ? Math.round((total / maxMonth) * 100) : 0;
-                const isCurrent = i === new Date().getMonth() && year === new Date().getFullYear();
+              return (
+                <div key={i} onClick={() => setSelectedMonth(i)}
+                  style={{
+                    background: isCurrent
+                      ? (dark ? '#1e2d40' : '#e8f4fc')
+                      : theme.cardBg,
+                    border: isCurrent
+                      ? `1.5px solid ${theme.accent}`
+                      : `1px solid ${theme.cardBorder}`,
+                    borderRadius: isMobile ? 12 : 14,
+                    padding: isMobile ? '14px 14px' : '20px 20px',
+                    cursor: 'pointer', position: 'relative',
+                    transition: 'all 0.2s',
+                    opacity: !total && !isCurrent ? 0.6 : 1
+                  }}
+                  onMouseOver={e => {
+                    e.currentTarget.style.borderColor = theme.accent;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseOut={e => {
+                    e.currentTarget.style.borderColor = isCurrent ? theme.accent : theme.cardBorder;
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}>
 
-                return (
-                  <div key={i} onClick={() => setSelectedMonth(i)}
-                    style={{
-                      background: isCurrent
-                        ? (dark ? '#1e2d40' : '#e8f4fc')
-                        : theme.cardBg,
-                      border: isCurrent
-                        ? `1.5px solid ${theme.accent}`
-                        : `1px solid ${theme.cardBorder}`,
-                      borderRadius: 14, padding: '20px 20px',
-                      cursor: 'pointer', position: 'relative',
-                      transition: 'all 0.2s',
-                      opacity: !total && !isCurrent ? 0.75 : 1
-                    }}
-                    onMouseOver={e => {
-                      e.currentTarget.style.borderColor = theme.accent;
-                      e.currentTarget.style.transform = 'translateY(-3px)';
-                      e.currentTarget.style.boxShadow = `0 8px 24px ${theme.accent}22`;
-                    }}
-                    onMouseOut={e => {
-                      e.currentTarget.style.borderColor = isCurrent ? theme.accent : theme.cardBorder;
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}>
-
-                    {/* Current badge */}
-                    {isCurrent && (
-                      <div style={{
-                        position: 'absolute', top: 12, right: 12,
-                        fontSize: 10, color: theme.accent,
-                        background: dark ? '#0d1e2e' : '#d0eaf8',
-                        padding: '3px 9px', borderRadius: 99,
-                        border: `1px solid ${theme.accent}55`,
-                        fontWeight: 500
-                      }}>
-                        NOW
-                      </div>
-                    )}
-
-                    {/* Month name — FIXED COLOR */}
+                  {isCurrent && (
                     <div style={{
-                      fontSize: 14,
-                      color: theme.textPrimary,
-                      marginBottom: 10,
-                      fontWeight: 600,
-                      letterSpacing: '0.01em'
-                    }}>
-                      {name}
-                    </div>
+                      position: 'absolute', top: 8, right: 8,
+                      fontSize: 9, color: theme.accent,
+                      background: dark ? '#0d1e2e' : '#d0eaf8',
+                      padding: '2px 7px', borderRadius: 99,
+                      border: `1px solid ${theme.accent}55`,
+                      fontWeight: 500
+                    }}>NOW</div>
+                  )}
 
-                    {/* Amount */}
-                    <div className="serif" style={{
-                      fontSize: 22,
-                      color: total ? theme.accent : theme.textPrimary,
-                      opacity: total ? 1 : 0.3,
-                      marginBottom: 14,
-                      letterSpacing: '-0.3px'
-                    }}>
-                      {total ? `₹${total.toLocaleString('en-IN')}` : '—'}
-                    </div>
+                  <div style={{
+                    fontSize: isMobile ? 12 : 13,
+                    color: theme.textPrimary,
+                    fontWeight: 600, marginBottom: 8
+                  }}>
+                    {isMobile ? name.slice(0, 3) : name}
+                  </div>
 
-                    {/* Progress bar */}
+                  <div className="serif" style={{
+                    fontSize: isMobile ? 16 : 20,
+                    color: total ? theme.accent : theme.textPrimary,
+                    opacity: total ? 1 : 0.3,
+                    marginBottom: isMobile ? 10 : 14,
+                    letterSpacing: '-0.3px'
+                  }}>
+                    {total ? `₹${total.toLocaleString('en-IN')}` : '—'}
+                  </div>
+
+                  <div style={{
+                    background: theme.barTrack,
+                    borderRadius: 99, height: 4, overflow: 'hidden'
+                  }}>
                     <div style={{
-                      background: theme.barTrack,
-                      borderRadius: 99, height: 5,
-                      overflow: 'hidden'
-                    }}>
-                      <div style={{
-                        width: barWidth + '%', height: '100%',
-                        background: barWidth > 75 ? theme.highlight : theme.accent,
-                        borderRadius: 99,
-                        transition: 'width 0.6s ease'
-                      }} />
-                    </div>
+                      width: barWidth + '%', height: '100%',
+                      background: barWidth > 75 ? theme.highlight : theme.accent,
+                      borderRadius: 99, transition: 'width 0.6s ease'
+                    }} />
+                  </div>
 
-                    {/* Footer row */}
+                  {!isMobile && (
                     <div style={{
-                      fontSize: 11,
-                      color: theme.textPrimary,
-                      opacity: 0.5,
-                      marginTop: 10,
-                      display: 'flex',
-                      justifyContent: 'space-between'
+                      fontSize: 11, color: theme.textPrimary,
+                      opacity: 0.45, marginTop: 8,
+                      display: 'flex', justifyContent: 'space-between'
                     }}>
                       <span>{total ? `${barWidth}% of peak` : 'No expenses'}</span>
-                      {total
-                        ? <span style={{ color: theme.accent, opacity: 1 }}>View →</span>
-                        : null}
+                      {total && <span style={{ color: theme.accent, opacity: 1 }}>View →</span>}
                     </div>
-
-                  </div>
-                );
-              })}
-            </div>
-          </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         )}
-
       </div>
     </div>
   );
