@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://expensio.vercel.app", 
+      "https://expensio-21av0z7ll-ayush-git403s-projects.vercel.app",
     ],
     credentials: true,
   }),
