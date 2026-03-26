@@ -20,10 +20,13 @@ export default function Home() {
   const [monthlyTotals, setMonthlyTotals] = useState({});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { fetchYearlyData(); }, [year]);
+  useEffect(() => {
+    fetchYearlyData();
+  }, [year]);  // ← year in dependency array — refetches on every year change
 
   async function fetchYearlyData() {
     setLoading(true);
+    setMonthlyTotals({});  // ← clear old year data immediately
     try {
       const { data } = await API.get(`/expenses?year=${year}`);
       const totals = {};
@@ -39,12 +42,12 @@ export default function Home() {
     }
   }
 
-  const totalYear   = Object.values(monthlyTotals).reduce((s, v) => s + v, 0);
-  const maxMonth    = Math.max(...Object.values(monthlyTotals), 1);
+  const totalYear    = Object.values(monthlyTotals).reduce((s, v) => s + v, 0);
+  const maxMonth     = Math.max(...Object.values(monthlyTotals), 1);
   const activeMonths = Object.keys(monthlyTotals).length;
 
-  const padding      = isMobile ? '16px 14px' : '32px 40px';
-  const gridCols     = isMobile ? 'repeat(2,1fr)' : isTablet ? 'repeat(3,1fr)' : 'repeat(4,1fr)';
+  const padding         = isMobile ? '16px 14px' : '32px 40px';
+  const gridCols        = isMobile ? 'repeat(2,1fr)' : isTablet ? 'repeat(3,1fr)' : 'repeat(4,1fr)';
   const summaryGridCols = isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)';
 
   if (selectedMonth !== null) {
@@ -233,7 +236,7 @@ export default function Home() {
             fontFamily: 'DM Sans, sans-serif',
             color: theme.textMuted, fontSize: 15
           }}>
-            Loading...
+            Loading {year}...
           </div>
         ) : (
           <div style={{

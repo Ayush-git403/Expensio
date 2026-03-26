@@ -13,6 +13,11 @@ router.get('/', protect, async (req, res) => {
       const start = new Date(year, month - 1, 1);
       const end = new Date(year, month, 1);
       query.date = { $gte: start, $lt: end };
+    } else if (year) {
+      // Filter by year ONLY — this is what Home.jsx uses
+      const start = new Date(year, 0, 1);   // Jan 1st
+      const end = new Date(year, 12, 1);    // Jan 1st next year
+      query.date = { $gte: start, $lt: end };
     }
 
     const expenses = await Expense.find(query).sort({ date: -1 });
