@@ -16,7 +16,6 @@ export function AuthProvider({ children }) {
       const { data } = await API.get('/auth/me');
       setUser(data);
     } catch (err) {
-      // Just set user to null — don't redirect
       setUser(null);
     } finally {
       setLoading(false);
@@ -42,16 +41,26 @@ export function AuthProvider({ children }) {
       <div style={{
         minHeight: '100vh',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#1a1a1a',
+        background: '#0a0a0a',
         fontFamily: 'DM Sans, sans-serif',
         color: '#ffffff',
-        fontSize: 18,
-        letterSpacing: '-0.3px',
-        fontWeight: 600
+        fontSize: 22,
+        fontWeight: 700,
+        letterSpacing: '-0.5px',
+        gap: 20
       }}>
         Expensio
+        <div style={{
+          width: 28, height: 28,
+          border: '2.5px solid #333',
+          borderTop: '2.5px solid #ffffff',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite'
+        }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }

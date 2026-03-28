@@ -5,12 +5,9 @@ const API = axios.create({
   withCredentials: true
 });
 
-// Remove the auto redirect — let AuthContext handle it
 API.interceptors.response.use(
   response => response,
-  error => {
-    return Promise.reject(error);
-  }
+  error => Promise.reject(error)
 );
 
 export default API;
