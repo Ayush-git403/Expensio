@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useWindowSize } from '../hooks/useWindowSize';
@@ -7,7 +8,6 @@ import {
   Tooltip, ResponsiveContainer
 } from 'recharts';
 import API from '../api/axios';
-import MonthView from '../components/MonthView';
 
 const MONTHS = [
   'January','February','March','April',
@@ -37,8 +37,8 @@ export default function Home() {
   const { user } = useAuth();
   const { dark, theme } = useTheme();
   const { isMobile, isTablet } = useWindowSize();
+  const navigate = useNavigate();
 
-  const [selectedMonth, setSelectedMonth] = useState(null);
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthlyTotals, setMonthlyTotals] = useState({});
   const [allExpenses, setAllExpenses] = useState([]);
@@ -54,7 +54,6 @@ export default function Home() {
     setAllExpenses([]);
     try {
       const { data } = await API.get(`/expenses?year=${year}`);
-      console.log('Frontend received expenses:', data.length, 'for year:', year);
       const totals = {};
       data.forEach(exp => {
         const m = new Date(exp.date).getMonth();
@@ -86,19 +85,6 @@ export default function Home() {
   const gridCols        = isMobile ? 'repeat(2,1fr)' : isTablet ? 'repeat(3,1fr)' : 'repeat(4,1fr)';
   const summaryGridCols = isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)';
 
-  if (selectedMonth !== null) {
-    return (
-      <MonthView
-        month={selectedMonth}
-        year={year}
-        onBack={() => {
-          setSelectedMonth(null);
-          fetchYearlyData();
-        }}
-      />
-    );
-  }
-
   const card = {
     background: theme.cardBg,
     border: `1px solid ${theme.cardBorder}`,
@@ -128,6 +114,7 @@ export default function Home() {
           gap: isMobile ? 16 : 0,
           marginBottom: isMobile ? 24 : 36
         }}>
+          {/* Welcome text */}
           <div>
             <h1 style={{
               fontFamily: 'DM Sans, sans-serif',
@@ -152,38 +139,85 @@ export default function Home() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button onClick={() => setYear(y => y - 1)} style={{
-              background: theme.cardBg,
-              border: `1px solid ${theme.cardBorder}`,
-              color: theme.textPrimary,
-              padding: isMobile ? '6px 12px' : '8px 16px',
-              borderRadius: 8, fontSize: 18,
-              cursor: 'pointer',
-              fontFamily: 'DM Sans, sans-serif'
-            }}>‹</button>
+          {/* Right side — Categories button + Year selector */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            flexWrap: isMobile ? 'wrap' : 'nowrap'
+          }}>
 
-            <span style={{
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: isMobile ? 20 : 24,
-              color: theme.textPrimary,
-              fontWeight: 700,
-              minWidth: 56,
-              textAlign: 'center',
-              letterSpacing: '-0.5px'
-            }}>
-              {year}
-            </span>
+            {/* Explore Categories button */}
+            <button
+              onClick={() => navigate(`/categories/${year}`)}
+              style={{
+                background: theme.cardBg,
+                border: `1px solid ${theme.cardBorder}`,
+                color: theme.textPrimary,
+                padding: isMobile ? '7px 14px' : '8px 18px',
+                borderRadius: 8, fontSize: 13,
+                cursor: 'pointer', fontWeight: 500,
+                fontFamily: 'DM Sans, sans-serif',
+                display: 'flex', alignItems: 'center', gap: 7,
+                transition: 'all 0.2s',
+                whiteSpace: 'nowrap'
+              }}
+              onMouseOver={e => {
+                e.currentTarget.style.borderColor = theme.accent;
+                e.currentTarget.style.background = theme.accent === '#000000'
+                  ? '#f5f5f5' : '#1a1a1a';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.borderColor = theme.cardBorder;
+                e.currentTarget.style.background = theme.cardBg;
+              }}>
+              🗂️ {isMobile ? 'Categories' : 'Explore Categories'}
+            </button>
 
-            <button onClick={() => setYear(y => y + 1)} style={{
-              background: theme.cardBg,
-              border: `1px solid ${theme.cardBorder}`,
-              color: theme.textPrimary,
-              padding: isMobile ? '6px 12px' : '8px 16px',
-              borderRadius: 8, fontSize: 18,
-              cursor: 'pointer',
-              fontFamily: 'DM Sans, sans-serif'
-            }}>›</button>
+            {/* Year selector */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <button onClick={() => setYear(y => y - 1)} style={{
+                background: theme.cardBg,
+                border: `1px solid ${theme.cardBorder}`,
+                color: theme.textPrimary,
+                padding: isMobile ? '6px 12px' : '8px 16px',
+                borderRadius: 8, fontSize: 18,
+                cursor: 'pointer',
+                fontFamily: 'DM Sans, sans-serif',
+                transition: 'all 0.2s'
+              }}
+                onMouseOver={e => e.currentTarget.style.borderColor = theme.accent}
+                onMouseOut={e => e.currentTarget.style.borderColor = theme.cardBorder}>
+                ‹
+              </button>
+
+              <span style={{
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: isMobile ? 20 : 24,
+                color: theme.textPrimary,
+                fontWeight: 700,
+                minWidth: 56,
+                textAlign: 'center',
+                letterSpacing: '-0.5px'
+              }}>
+                {year}
+              </span>
+
+              <button onClick={() => setYear(y => y + 1)} style={{
+                background: theme.cardBg,
+                border: `1px solid ${theme.cardBorder}`,
+                color: theme.textPrimary,
+                padding: isMobile ? '6px 12px' : '8px 16px',
+                borderRadius: 8, fontSize: 18,
+                cursor: 'pointer',
+                fontFamily: 'DM Sans, sans-serif',
+                transition: 'all 0.2s'
+              }}
+                onMouseOver={e => e.currentTarget.style.borderColor = theme.accent}
+                onMouseOut={e => e.currentTarget.style.borderColor = theme.cardBorder}>
+                ›
+              </button>
+            </div>
           </div>
         </div>
 
@@ -353,23 +387,17 @@ export default function Home() {
                       : 'none'
                   }}>
                     <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      flex: 1,
-                      minWidth: 0
+                      display: 'flex', alignItems: 'center',
+                      gap: 10, flex: 1, minWidth: 0
                     }}>
                       <div style={{
-                        width: 24, height: 24,
-                        borderRadius: '50%',
+                        width: 24, height: 24, borderRadius: '50%',
                         background: i === 0
                           ? (dark ? '#ffffff' : '#000000')
                           : theme.cardBorder,
-                        display: 'flex',
-                        alignItems: 'center',
+                        display: 'flex', alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: 10, fontWeight: 700,
-                        flexShrink: 0,
+                        fontSize: 10, fontWeight: 700, flexShrink: 0,
                         color: i === 0
                           ? (dark ? '#000000' : '#ffffff')
                           : theme.textMuted,
@@ -389,8 +417,7 @@ export default function Home() {
                           {exp.name}
                         </div>
                         <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
+                          display: 'flex', alignItems: 'center',
                           gap: 6, marginTop: 3
                         }}>
                           <span style={{
@@ -398,16 +425,13 @@ export default function Home() {
                             fontSize: 10,
                             background: (CATEGORY_COLORS[exp.category] || '#888') + '22',
                             color: CATEGORY_COLORS[exp.category] || '#888',
-                            padding: '1px 7px',
-                            borderRadius: 99,
-                            fontWeight: 500
+                            padding: '1px 7px', borderRadius: 99, fontWeight: 500
                           }}>
                             {exp.category}
                           </span>
                           <span style={{
                             fontFamily: 'DM Sans, sans-serif',
-                            fontSize: 10,
-                            color: theme.textMuted
+                            fontSize: 10, color: theme.textMuted
                           }}>
                             {SHORT[new Date(exp.date).getMonth()]}
                           </span>
@@ -419,8 +443,7 @@ export default function Home() {
                       fontSize: 15, fontWeight: 700,
                       color: theme.monthCardText,
                       letterSpacing: '-0.3px',
-                      flexShrink: 0,
-                      marginLeft: 8
+                      flexShrink: 0, marginLeft: 8
                     }}>
                       ₹{exp.amount.toLocaleString('en-IN')}
                     </div>
@@ -429,13 +452,10 @@ export default function Home() {
               </div>
             ) : (
               <div style={{
-                height: 200,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                height: 200, display: 'flex',
+                alignItems: 'center', justifyContent: 'center',
                 fontFamily: 'DM Sans, sans-serif',
-                color: theme.textMuted,
-                fontSize: 13
+                color: theme.textMuted, fontSize: 13
               }}>
                 No expenses in {year}
               </div>
@@ -446,11 +466,8 @@ export default function Home() {
         {/* ── Section label ── */}
         <div style={{
           fontFamily: 'DM Sans, sans-serif',
-          fontSize: 11,
-          color: theme.textMuted,
-          letterSpacing: '0.1em',
-          fontWeight: 500,
-          marginBottom: 14
+          fontSize: 11, color: theme.textMuted,
+          letterSpacing: '0.1em', fontWeight: 500, marginBottom: 14
         }}>
           MONTHLY BREAKDOWN — TAP A MONTH TO VIEW EXPENSES
         </div>
@@ -471,8 +488,8 @@ export default function Home() {
             gap: isMobile ? 10 : 14
           }}>
             {MONTHS.map((name, i) => {
-              const total     = monthlyTotals[i] || 0;
-              const barWidth  = total
+              const total    = monthlyTotals[i] || 0;
+              const barWidth = total
                 ? Math.round((total / maxMonth) * 100)
                 : 0;
               const isCurrent = i === new Date().getMonth() &&
@@ -481,7 +498,7 @@ export default function Home() {
               return (
                 <div
                   key={i}
-                  onClick={() => setSelectedMonth(i)}
+                  onClick={() => navigate(`/month/${year}/${i}`)}
                   style={{
                     background: theme.monthCardBg,
                     border: isCurrent
@@ -489,8 +506,7 @@ export default function Home() {
                       : `1px solid ${theme.monthCardBorder}`,
                     borderRadius: isMobile ? 12 : 14,
                     padding: isMobile ? '14px 14px' : '20px 20px',
-                    cursor: 'pointer',
-                    position: 'relative',
+                    cursor: 'pointer', position: 'relative',
                     transition: 'all 0.2s',
                     opacity: !total && !isCurrent ? 0.45 : 1
                   }}
@@ -528,8 +544,7 @@ export default function Home() {
                     fontFamily: 'DM Sans, sans-serif',
                     fontSize: isMobile ? 12 : 13,
                     color: theme.monthCardText,
-                    fontWeight: 700,
-                    marginBottom: 10,
+                    fontWeight: 700, marginBottom: 10,
                     letterSpacing: '0.02em'
                   }}>
                     {isMobile ? name.slice(0, 3) : name}
@@ -564,20 +579,16 @@ export default function Home() {
                   {!isMobile && (
                     <div style={{
                       fontFamily: 'DM Sans, sans-serif',
-                      fontSize: 11,
-                      color: theme.monthCardMuted,
-                      marginTop: 9,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      fontWeight: 300
+                      fontSize: 11, color: theme.monthCardMuted,
+                      marginTop: 9, display: 'flex',
+                      justifyContent: 'space-between', fontWeight: 300
                     }}>
                       <span>
                         {total ? `${barWidth}% of peak` : 'No expenses'}
                       </span>
                       {total && (
                         <span style={{
-                          color: theme.monthCardText,
-                          fontWeight: 600
+                          color: theme.monthCardText, fontWeight: 600
                         }}>
                           View →
                         </span>
