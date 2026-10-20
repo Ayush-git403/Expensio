@@ -456,7 +456,7 @@ export default function MonthView({ month, year, onBack }) {
                         onMouseOut={ev => ev.currentTarget.style.borderColor = theme.cardBorder}>
                         Edit
                       </button>
-                      <button onClick={() => handleDelete(e._id)} style={{
+                      <button onClick={(ev) => { ev.stopPropagation(); handleDelete(e._id)}} style={{
                         background: 'none',
                         border: `1px solid ${theme.highlight}66`,
                         color: theme.highlight,
